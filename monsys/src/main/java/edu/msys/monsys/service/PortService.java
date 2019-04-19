@@ -1,7 +1,7 @@
 package edu.msys.monsys.service;
 
-import edu.msys.monsys.data.PortRepository;
-import edu.msys.monsys.model.Port;
+import edu.msys.monsys.repository.PortRepository;
+import edu.msys.monsys.entity.Port;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

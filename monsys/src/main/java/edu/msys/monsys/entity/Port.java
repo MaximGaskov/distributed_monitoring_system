@@ -1,4 +1,4 @@
-package edu.msys.monsys.model;
+package edu.msys.monsys.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;

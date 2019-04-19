@@ -1,7 +1,7 @@
 package edu.msys.monsys.service;
 
-import edu.msys.monsys.data.HostRepository;
-import edu.msys.monsys.model.Host;
+import edu.msys.monsys.repository.HostRepository;
+import edu.msys.monsys.entity.Host;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

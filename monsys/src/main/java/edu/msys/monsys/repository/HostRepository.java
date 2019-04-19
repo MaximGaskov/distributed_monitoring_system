@@ -1,6 +1,6 @@
-package edu.msys.monsys.data;
+package edu.msys.monsys.repository;
 
-import edu.msys.monsys.model.Host;
+import edu.msys.monsys.entity.Host;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
