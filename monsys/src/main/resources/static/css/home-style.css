@@ -1,0 +1,115 @@
+.module {
+    position: relative;
+    background-color: #b1bdc5;
+    border-radius: 4px;
+    padding-right: 2px;
+}
+
+.module .titl {
+    margin-left: 10px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    color: #474554;
+    font-size: 16px;
+    font-weight: bolder;
+}
+
+
+.module .add-form{
+    position: absolute;
+    width: 100%;
+    bottom: 0%;
+    background-color: #b1bdc5;
+}
+
+.module .host-table {
+    min-height: 0%;
+    max-height: 80%;
+    width: 100%;
+}
+
+
+.module .log-table {
+    height: 90%;
+    width: 100%;
+}
+
+.module .log-table td{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 6px;
+}
+
+.module .port-table {
+    min-height: 0%;
+    max-height: 80%;
+    width: 100%;
+}
+
+.module .monitoring-table {
+    min-height: 0%;
+    max-height: 80%;
+    width: 100%;
+}
+
+.white-plate {
+    position: absolute;
+    width: 98%;
+    height: 100%;
+    background-color: white;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.top-module {
+    height: 50vh;
+}
+
+.bot-module {
+    height: 38vh;
+}
+
+
+.scrollable {
+    overflow: auto;
+    scrollbar-color: #dadde2 #b1bdc5;
+    scrollbar-width: thin;
+}
+
+body {
+    background-color: #dadde2;
+}
+
+.container {
+    overflow: hidden;
+    height: 92vh;
+    background-color: white;
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+
+
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) { }
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently*/
+}
