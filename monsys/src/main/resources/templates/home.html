@@ -5,6 +5,9 @@
     <title>Monsys</title>
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/home-style.css}">
+    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
 </head>
 
 <body>
@@ -20,14 +23,14 @@
 
 
 <div class="bg">
-    <div class="container pt-4 mt-2">
+    <div class="container pt-2 mt-2 pb-2">
         <div class="row">
             <div class="col-md-7 pr-1">
                 <div class="module top-module">
 
                     <div class="titl">Хосты</div>
                     <div class="white-plate">
-                        <div class="host-table tbl scrollable">
+                        <div class="host-table scrollable" id="hTable">
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
@@ -69,13 +72,17 @@
                                     <td><a href="#">Удалить</a></td>
                                 </tr>
 
+
+                                </tbody>
+
+                                <tfoot>
                                 <tr>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
-                                </tbody>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -96,7 +103,7 @@
                     <div class="titl">Лог событий</div>
 
                     <div class="white-plate">
-                        <div class="log-table tbl scrollable">
+                        <div class="log-table scrollable">
                             <table class="table table-borderless">
                                 <tbody>
                                 <tr>
@@ -172,7 +179,7 @@
                     <div class="titl">Порты *айпи хоста*</div>
 
                     <div class="white-plate">
-                        <div class="port-table tbl scrollable">
+                        <div class="port-table scrollable">
                             <table class="table table-borderless">
                                 <thead>
                                 <tr>
@@ -208,12 +215,15 @@
                                     <td><a href="#">Удалить</a></td>
                                 </tr>
 
+                                </tbody>
+
+                                <tfoot>
                                 <tr>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
-                                </tbody>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -234,8 +244,8 @@
 
                     <div class="titl">Хосты мониторинга</div>
                     <div class="white-plate">
-                        <div class="monitoring-table tbl scrollable text-center">
-                            <table class="table table-borderless">
+                        <div class="monitoring-table  scrollable text-center">
+                            <table class="table table-striped">
                                 <thead>
                                 <tr>
                                     <th scope="col">IP-адрес хоста мониторинга</th>
@@ -247,7 +257,11 @@
                                 <tr>
                                     <th scope="row">125.0.0.1</th>
                                     <td>5</td>
-                                    <td><a href="#">Настройки</a></td>
+                                    <td>
+                                        <a data-toggle="modal" data-target="#monitoringSettings" href="#">
+                                            Настройки
+                                        </a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">125.0.0.1</th>
@@ -258,14 +272,17 @@
                                     <th scope="row">125.0.0.1</th>
                                     <td>5</td>
                                     <td><a href="#">Настройки</a></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
                                 </tr>
 
                                 </tbody>
+
+                                <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -281,7 +298,98 @@
 </div>
 
 
-</div>
+<!-- Modal -->
+<div class="modal fade " id="monitoringSettings" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Настройки хоста мониторинга *айпи адрес*</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mhost-table scrollable">
+                    <table class="table table-striped text-center">
+                        <tbody>
+                        <tr>
+                            <td>192.168.10.1</td>
+                            <td><a href="#">Отменить мониторинг</a></td>
+                        </tr>
+                        <tr>
+                            <td>192.168.10.1</td>
+                            <td><a href="#">Отменить мониторинг</a></td>
+                        </tr>
+                        <tr>
+                            <td>192.168.10.1</td>
+                            <td><a href="#">Отменить мониторинг</a></td>
+                        </tr>
+                        <tr>
+                            <td>192.168.10.1</td>
+                            <td><a href="#">Отменить мониторинг</a></td>
+                        </tr>
+                        <tr>
+                            <td>192.168.10.1</td>
+                            <td><a href="#">Отменить мониторинг</a></td>
+                        </tr>
+                        <tr>
+                            <td>192.168.10.1</td>
+                            <td><a href="#">Отменить мониторинг</a></td>
+                        </tr>
+                        <tr>
+                            <td>192.168.10.1</td>
+                            <td><a href="#">Отменить мониторинг</a></td>
+                        </tr>
+                        <tr>
+                            <td>192.168.10.1</td>
+                            <td><a href="#">Отменить мониторинг</a></td>
+                        </tr>
+                        <tr>
+                            <td>192.168.10.1</td>
+                            <td><a href="#">Отменить мониторинг</a></td>
+                        </tr>
+                        <tr>
+                            <td>192.168.10.1</td>
+                            <td><a href="#">Отменить мониторинг</a></td>
+                        </tr>
+                        <tr>
+                            <td>192.168.10.1</td>
+                            <td><a href="#">Отменить мониторинг</a></td>
+                        </tr>
+                        <tr>
+                            <td>192.168.10.1</td>
+                            <td><a href="#">Отменить мониторинг</a></td>
+                        </tr>
+                        <tr>
+                            <td>192.168.10.1</td>
+                            <td><a href="#">Отменить мониторинг</a></td>
+                        </tr>
+                        <tr>
+                            <td>192.168.10.1</td>
+                            <td><a href="#">Отменить мониторинг</a></td>
+                        </tr>
+                        </tbody>
 
+                    </table>
+                </div>
+            </div>
+            <form class="add-form">
+                <div class="form-row pb-2 pt-2 pl-4 pr-4">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="IP-адрес">
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary float-right">Добавить цель</button>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger ml-auto mr-auto" data-dismiss="modal">Удалить
+                    хост</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
