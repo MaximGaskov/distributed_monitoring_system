@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>Monsys</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home-style.css}">
+    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-dark navbar-dark py-0 py-md-0">
+    <span class="navbar-brand noselect">Monsys</span>
+    <span class="nav-item ml-auto"><a class="nav-link disabled" href="#" tabindex="-1"
+                                      aria-disabled="true">User</a></span>
+    <span class="nav-item ml-auto"><a class="nav-link text-white" href="#">Log out</a></span>
+
+</nav>
+
+
+
+<div class="bg">
+    <div class="container pt-2 mt-2 pb-2">
+        <div class="row">
+            <div class="col-md-7 pr-1">
+                <div class="module top-module">
+
+                    <div class="titl">Хосты</div>
+                    <div class="white-plate">
+                        <div class="host-table scrollable" id="hTable">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">IP-адрес</th>
+                                    <th scope="col">Доменное имя</th>
+                                    <th scope="col">Статус</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">127.255.255.255</th>
+                                    <td>www.aaa.com</td>
+                                    <td>
+                                        <svg height="20" width="20">
+                                            <circle cx="10" cy="10" r="8" stroke-width="1" fill="red" />
+                                        </svg>
+                                    </td>
+                                    <td><a href="#">Удалить</a></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">127.255.255.255</th>
+                                    <td>www.aaa.com</td>
+                                    <td>
+                                        <svg height="20" width="20">
+                                            <circle cx="10" cy="10" r="8" stroke-width="1" fill="yellow" />
+                                        </svg>
+                                    </td>
+                                    <td><a href="#">Удалить</a></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">127.255.255.255</th>
+                                    <td>www.aaa.com</td>
+                                    <td>
+                                        <svg height="20" width="20">
+                                            <circle cx="10" cy="10" r="8" stroke-width="1" fill="green" />
+                                        </svg>
+                                    </td>
+                                    <td><a href="#">Удалить</a></td>
+                                </tr>
+
+
+                                </tbody>
+
+                                <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <form class="add-host add-form">
+                        <div class="form-row p-2">
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="IP-адрес">
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary float-right">Добавить</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md pl-0">
+                <div class="module top-module">
+                    <div class="titl">Лог событий</div>
+
+                    <div class="white-plate">
+                        <div class="log-table scrollable">
+                            <table class="table table-borderless">
+                                <tbody>
+                                <tr>
+                                    <td>20-04-219 14:31</td>
+                                    <td><i>port</i> <b>192.168.11.1:80</b> <i>is down</i></td>
+                                </tr>
+                                <tr>
+                                    <td>20-04-219 14:31</td>
+                                    <td><i>host</i> <b>192.168.10.1</b> <i>is down</i></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md pr-1">
+                <div class="module bot-module">
+                    <div class="titl">Порты *айпи хоста*</div>
+
+                    <div class="white-plate">
+                        <div class="port-table scrollable">
+                            <table class="table table-borderless">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Порт</th>
+                                    <th scope="col">Сервис</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">80</th>
+                                    <td>http</td>
+                                    <td><a href="#">Удалить</a></td>
+                                </tr>
+                                </tbody>
+
+                                <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <form class="add-port add-form">
+                        <div class="form-row p-2">
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="Порт">
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary float-right">Добавить</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md pl-0">
+                <div class="module bot-module">
+
+                    <div class="titl">Хосты мониторинга</div>
+                    <div class="white-plate">
+                        <div class="monitoring-table  scrollable text-center">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">IP-адрес хоста мониторинга</th>
+                                    <th scope="col">Количество целевых хостов</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">125.0.0.1</th>
+                                    <td>5</td>
+                                    <td>
+                                        <a data-toggle="modal" data-target="#monitoringSettings" href="#">
+                                            Подробности
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+
+                                <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="text-center add-form p-2">
+                        <button type="submit" class="btn btn-primary">Добавить</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade " id="monitoringSettings" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Цели хоста мониторинга *айпи адрес*</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mhost-table scrollable">
+                    <table class="table table-striped text-center">
+                        <tbody>
+                        <tr>
+                            <td>192.168.10.1</td>
+
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger ml-auto mr-auto" data-dismiss="modal">Удалить
+                    хост</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

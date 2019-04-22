@@ -1,0 +1,39 @@
+package edu.max.monsys.entity;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@NoArgsConstructor
+@Getter
+@Setter
+@Table(name = "monitoring_hosts", schema = "monitoring_schema")
+public class MonitoringHost {
+
+    @Id
+    @GeneratedValue
+    @Setter(AccessLevel.NONE)
+    Integer id;
+
+    @Column(name = "ip_addr", nullable = false, unique = true)
+    private String ipAddress;
+
+    @OneToMany(mappedBy = "observer")
+    private Set<Host> targets = new HashSet<>();
+
+    public MonitoringHost(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
+    public void addTarget(Host target) {
+        this.targets.add(target);
+        target.setObserver(this);
+    }
+
+}
