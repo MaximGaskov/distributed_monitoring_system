@@ -19,13 +19,11 @@ public class Port {
     @GeneratedValue
     @Setter(AccessLevel.NONE)
     private Integer id;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JsonIgnore
-    private Host host;
     @Column(nullable = false)
     private int port;
     @Column(name = "port_is_up")
     private boolean up;
+    @Column(name = "service", columnDefinition = "varchar(255) default 'unknown'")
     private String service;
 
     public Port(int port) {
@@ -36,7 +34,6 @@ public class Port {
     public String toString() {
         return "Port{" +
                 "id=" + id +
-                ", host=" + host +
                 ", port=" + port +
                 ", up=" + up +
                 ", service='" + service + '\'' +

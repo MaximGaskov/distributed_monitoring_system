@@ -24,7 +24,8 @@ public class MonitoringHost {
     @Column(name = "ip_addr", nullable = false, unique = true)
     private String ipAddress;
 
-    @OneToMany(mappedBy = "observer")
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "observer_id")
     private Set<Host> targets = new HashSet<>();
 
     public MonitoringHost(String ipAddress) {
@@ -33,7 +34,6 @@ public class MonitoringHost {
 
     public void addTarget(Host target) {
         this.targets.add(target);
-        target.setObserver(this);
     }
 
 }

@@ -15,6 +15,9 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "hosts", schema = "monitoring_schema")
+@org.hibernate.annotations.Entity(
+        dynamicInsert = true
+)
 public class Host {
 
     @Id
@@ -25,17 +28,14 @@ public class Host {
     @Column(name = "ip_addr", nullable = false, unique = true)
     private String ipAddress;
 
-    @Column(name = "domain")
+    @Column(name = "domain", columnDefinition = "varchar(255) default 'unknown'")
     private String domainName;
 
     @Column(name = "host_is_up")
     private boolean up;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    private MonitoringHost observer;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "host")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name="host_id")
     private Set<Port> ports = new HashSet<>();
 
 
@@ -45,7 +45,6 @@ public class Host {
 
     public void addPort(Port port) {
         this.ports.add(port);
-        port.setHost(this);
     }
 
     @Override
