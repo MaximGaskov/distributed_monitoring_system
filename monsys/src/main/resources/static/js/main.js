@@ -128,6 +128,8 @@ function updateModalContent(monitoringHostId) {
 $(document).on("click", "#hTable tbody tr", function () {
     if ($(this).hasClass("activeRow")) {
         $(this).removeClass("activeRow");
+        $("#pTable tbody tr").remove();
+        $("#portsTableLabel").html("Список портов");
     }
     else {
         $("#hTable tbody tr").removeClass("activeRow");
