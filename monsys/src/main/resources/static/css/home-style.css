@@ -43,6 +43,12 @@
     cursor: pointer;
 }
 
+.module .monitoring-table .table tbody tr:hover{
+    background-color: #b1bdc5;
+    cursor: pointer;
+}
+
+
 .module .table th{
     padding-top: 4px;
     padding-bottom: 4px;
@@ -93,6 +99,11 @@
     overflow: auto;
     scrollbar-color: #dadde2 #b1bdc5;
     scrollbar-width: thin;
+}
+
+.activeRow {
+
+    background-color: black;
 }
 
 body {

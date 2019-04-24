@@ -19,5 +19,4 @@ class HostsController {
         return hostRepository.findAll();
     }
 
-
 }

@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Table(name = "ports", schema = "monitoring_schema")
+@org.hibernate.annotations.Entity(dynamicInsert = true)
 public class Port {
 
     @Id
@@ -20,21 +21,21 @@ public class Port {
     @Setter(AccessLevel.NONE)
     private Integer id;
     @Column(nullable = false)
-    private int port;
+    private int number;
     @Column(name = "port_is_up")
     private boolean up;
     @Column(name = "service", columnDefinition = "varchar(255) default 'unknown'")
     private String service;
 
-    public Port(int port) {
-        this.port = port;
+    public Port(int number) {
+        this.number = number;
     }
 
     @Override
     public String toString() {
         return "Port{" +
                 "id=" + id +
-                ", port=" + port +
+                ", portNum=" + number +
                 ", up=" + up +
                 ", service='" + service + '\'' +
                 '}';

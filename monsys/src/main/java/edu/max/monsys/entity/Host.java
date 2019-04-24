@@ -15,9 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "hosts", schema = "monitoring_schema")
-@org.hibernate.annotations.Entity(
-        dynamicInsert = true
-)
+@org.hibernate.annotations.Entity(dynamicInsert = true)
 public class Host {
 
     @Id
