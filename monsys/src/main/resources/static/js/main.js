@@ -56,11 +56,13 @@ function updateMonitoringHostTable() {
         var rowData = [];
 
         jQuery(data).each(function(i, mHostEntity){
-            rowData.push("<tr id='" + mHostEntity.id + "' >" +
+
+            rowData.push("<tr>" +
                 "<th scope='row'>" + mHostEntity.ipAddress + "</th>" +
                 "<td>" + mHostEntity.targets.length + "</td>" +
-                "<td><a data-toggle=\"modal\" data-target=\"#monitoringSettings\" href=\"#\">Подробности</a></td>" +
-                "</tr> ")
+                "<td><a id='" + mHostEntity.id + "' data-toggle=\"modal\" data-target=\"#monitoringSettings\" href=\"#\">Подробности</a></td>" +
+                "</tr>")
+
         });
 
         $("#mTable tbody tr").remove();
@@ -96,10 +98,29 @@ function showPortsForHost(id) {
 
         });
 
-        console.log(data);
-
         $("#pTable tbody tr").remove();
         $("#pTable tbody").append(portRow.join(""));
+
+    });
+}
+
+function updateModalContent(monitoringHostId) {
+    console.log(monitoringHostId);
+    $.getJSON('/hosts/monitoring/' + monitoringHostId, function (data) {
+
+        var portRow = [];
+
+        jQuery(data.targets).each(function (i, hostEntity) {
+
+            portRow.push("<tr>" +
+                "<td>" + hostEntity.ipAddress + "</td>" +
+                "</tr>"
+            );
+        });
+
+
+        $("#modalTable tbody tr").remove();
+        $("#modalTable tbody").append(portRow.join(""));
 
     });
 }
@@ -112,19 +133,14 @@ $(document).on("click", "#hTable tbody tr", function () {
         $("#hTable tbody tr").removeClass("activeRow");
         $(this).addClass("activeRow");
         showPortsForHost( $(this).attr('id'));
+        $("#portsTableLabel").html("Список портов " + $(this).find("th").text());
     }
 });
 
-// $(document).on ("click", "#mTable tbody tr a", function () {
-//     var modalRowData = [];
-//
-//     jQuery(mHostEntity.targets).each(function (i, target) {
-//         modalRowData.push("<tr>" + target.ipAddress + "</tr>");
-//     })
-//
-//     $("#modalTable tbody tr").remove();
-//     $("#modalTable tbody").append(modalRowData.join(""));
-// });
+$(document).on("click", "#mTable tbody a", function () {
+    $("#modalLabel").html("Цели хоста мониторинга <i>" + $(this).parent().parent().find("th").text() + "</i>");
+    updateModalContent( $(this).attr('id'));
+});
 
 intervalId = setInterval(updateHostTable, 3000);
 intervalId = setInterval(updateMonitoringHostTable, 3000);

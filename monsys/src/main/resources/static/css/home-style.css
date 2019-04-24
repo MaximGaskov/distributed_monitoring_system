@@ -71,7 +71,6 @@
     width: 100%;
 }
 
-
 .modal .mhost-table {
     height: 200px;
     width: 100%;
@@ -103,7 +102,7 @@
 
 .activeRow {
 
-    background-color: black;
+    background-color: #889fa5 !important;
 }
 
 body {
