@@ -26,11 +26,12 @@ public class Host {
     @Column(name = "ip_addr", nullable = false, unique = true)
     private String ipAddress;
 
-    @Column(name = "domain", columnDefinition = "varchar(255) default 'unknown'")
+    @Column(name = "domain", columnDefinition = "varchar(255) default 'неизвестно'")
     private String domainName;
 
     @Column(name = "host_is_up")
     private boolean up;
+
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="host_id")

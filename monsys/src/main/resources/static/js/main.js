@@ -86,7 +86,7 @@ function showPortsForHost(id) {
 
             portRow.push("<tr>" +
                 "<th scope='row'>" + portEntity.number + "</th>" +
-                "<td>" + portEntity.sevice + "</td>" +
+                "<td><i>" + portEntity.service + "</i></td>" +
                 "<td>" +
                 "<svg height=\"20\" width=\"20\">\n" +
                 "<circle cx=\"10\" cy=\"10\" r=\"8\" stroke-width=\"1\" fill=\"" + statusColor + "\" />\n" +
@@ -108,11 +108,11 @@ function updateModalContent(monitoringHostId) {
     console.log(monitoringHostId);
     $.getJSON('/hosts/monitoring/' + monitoringHostId, function (data) {
 
-        var portRow = [];
+        var hostRow = [];
 
         jQuery(data.targets).each(function (i, hostEntity) {
 
-            portRow.push("<tr>" +
+            hostRow.push("<tr>" +
                 "<td>" + hostEntity.ipAddress + "</td>" +
                 "</tr>"
             );
@@ -120,7 +120,7 @@ function updateModalContent(monitoringHostId) {
 
 
         $("#modalTable tbody tr").remove();
-        $("#modalTable tbody").append(portRow.join(""));
+        $("#modalTable tbody").append(hostRow.join(""));
 
     });
 }
@@ -142,6 +142,20 @@ $(document).on("click", "#hTable tbody tr", function () {
 $(document).on("click", "#mTable tbody a", function () {
     $("#modalLabel").html("Цели хоста мониторинга <i>" + $(this).parent().parent().find("th").text() + "</i>");
     updateModalContent( $(this).attr('id'));
+});
+
+$('#hostIpForm').submit(function(e){
+    e.preventDefault();
+    $.ajax({
+        url:'/hosts',
+        type:'post',
+        data:$('#hostIpForm').serialize(),
+        success:function(data) {
+            updateHostTable();
+            $("#hostIpValidationMsg").text(data);
+
+        }
+    });
 });
 
 intervalId = setInterval(updateHostTable, 3000);

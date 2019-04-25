@@ -24,7 +24,7 @@ public class Port {
     private int number;
     @Column(name = "port_is_up")
     private boolean up;
-    @Column(name = "service", columnDefinition = "varchar(255) default 'unknown'")
+    @Column(name = "service", columnDefinition = "varchar(255) default 'неизвестен'")
     private String service;
 
     public Port(int number) {

@@ -54,13 +54,16 @@
                             </table>
                         </div>
                     </div>
-                    <form class="add-host add-form">
+                    <form class="add-host add-form" method="post" action="/hosts" id = "hostIpForm">
                         <div class="form-row p-2">
-                            <div class="col">
-                                <input type="text" class="form-control" placeholder="IP-адрес">
+                            <div class="col-3">
+                                <input type="text" class="form-control" name="ip" placeholder="IP-адрес">
                             </div>
+                            <div class="col text-center text-secondary pr-2 pt-2" id="hostIpValidationMsg"></div>
                             <div class="col">
-                                <button type="submit" class="btn btn-primary float-right">Добавить</button>
+                                <button type="submit" class="btn btn-primary float-right">
+                                    Добавить
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -120,7 +123,7 @@
                     </div>
                     <form class="add-port add-form">
                         <div class="form-row p-2">
-                            <div class="col">
+                            <div class="col-2">
                                 <input type="text" class="form-control" placeholder="Порт">
                             </div>
                             <div class="col">
