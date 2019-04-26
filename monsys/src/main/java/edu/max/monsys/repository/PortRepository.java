@@ -1,7 +1,11 @@
 package edu.max.monsys.repository;
 
 import edu.max.monsys.entity.Port;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PortRepository extends CrudRepository<Port, Integer> {
+import java.util.Optional;
+
+public interface PortRepository extends JpaRepository<Port, Integer> {
+
+    Optional<Port> findPortByNumber(int num);//and host id
 }

@@ -2,6 +2,7 @@ package edu.max.monsys.controller;
 
 import edu.max.monsys.entity.Host;
 import edu.max.monsys.repository.HostRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,11 +13,8 @@ import javax.validation.constraints.Pattern;
 @RequestMapping("/hosts")
 class HostsController {
 
-    private final HostRepository hostRepository;
-
-    public HostsController(HostRepository hostRepository) {
-        this.hostRepository = hostRepository;
-    }
+    @Autowired
+    private HostRepository hostRepository;
 
     @GetMapping
     public Iterable<Host> findAll() {

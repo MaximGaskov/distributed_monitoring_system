@@ -121,11 +121,12 @@
                             </table>
                         </div>
                     </div>
-                    <form class="add-port add-form">
+                    <form class="add-port add-form" id="portForm">
                         <div class="form-row p-2">
                             <div class="col-2">
-                                <input type="text" class="form-control" placeholder="Порт">
+                                <input type="text" class="form-control" name="port" placeholder="Порт">
                             </div>
+                            <div class="col text-center text-secondary pr-2 pt-2" id="portValidationMsg"></div>
                             <div class="col">
                                 <button type="submit" class="btn btn-primary float-right">Добавить</button>
                             </div>

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,8 +34,7 @@ public class Host {
     private boolean up;
 
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name="host_id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, mappedBy = "host")
     private Set<Port> ports = new HashSet<>();
 
 
@@ -42,8 +42,10 @@ public class Host {
         this.ipAddress = ipAddress;
     }
 
+
     public void addPort(Port port) {
         this.ports.add(port);
+        port.setHost(this);
     }
 
     @Override

@@ -26,6 +26,10 @@ public class Port {
     private boolean up;
     @Column(name = "service", columnDefinition = "varchar(255) default 'неизвестен'")
     private String service;
+    @ManyToOne
+    @JoinColumn(name="host_id")
+    @JsonIgnore
+    private Host host;
 
     public Port(int number) {
         this.number = number;

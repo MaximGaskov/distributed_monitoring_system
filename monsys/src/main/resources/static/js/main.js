@@ -60,7 +60,8 @@ function updateMonitoringHostTable() {
             rowData.push("<tr>" +
                 "<th scope='row'>" + mHostEntity.ipAddress + "</th>" +
                 "<td>" + mHostEntity.targets.length + "</td>" +
-                "<td><a id='" + mHostEntity.id + "' data-toggle=\"modal\" data-target=\"#monitoringSettings\" href=\"#\">Подробности</a></td>" +
+                "<td><a id='" + mHostEntity.id + "' data-toggle=\"modal\" " +
+                "data-target=\"#monitoringSettings\" href=\"#\">Подробности</a></td>" +
                 "</tr>")
 
         });
@@ -130,12 +131,14 @@ $(document).on("click", "#hTable tbody tr", function () {
         $(this).removeClass("activeRow");
         $("#pTable tbody tr").remove();
         $("#portsTableLabel").html("Список портов");
+        chosenHostId = 0;
     }
     else {
         $("#hTable tbody tr").removeClass("activeRow");
         $(this).addClass("activeRow");
         showPortsForHost( $(this).attr('id'));
         $("#portsTableLabel").html("Список портов " + $(this).find("th").text());
+        chosenHostId = $(this).attr('id');
     }
 });
 
@@ -156,6 +159,26 @@ $('#hostIpForm').submit(function(e){
 
         }
     });
+});
+
+var chosenHostId;
+
+$('#portForm').submit(function(e){
+    e.preventDefault();
+    var dataToSend = $('#portForm').serialize() + "&hostId=" + chosenHostId;
+    console.log(dataToSend)
+    if(chosenHostId !== 0) {
+        $.ajax({
+            url:'/ports',
+            type:'post',
+            data: dataToSend,
+            success:function(data) {
+                $("#portValidationMsg").text(data);
+                showPortsForHost(chosenHostId);
+            }
+        });
+        showPortsForHost(chosenHostId);
+    }
 });
 
 intervalId = setInterval(updateHostTable, 3000);

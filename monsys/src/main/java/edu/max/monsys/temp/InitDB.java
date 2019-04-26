@@ -28,7 +28,6 @@ public class InitDB {
             hs.save(h4);
 
 
-            h1.addPort(new Port(10));
             h1.addPort(new Port(12));
 
             MonitoringHost mh1 = new MonitoringHost("10.0.0.1");
@@ -45,6 +44,9 @@ public class InitDB {
             mhs.save(mh1);
             mhs.save(mh2);
             mhs.save(mh3);
+
+
+            h1.addPort(new Port(10));
 
 
         };
