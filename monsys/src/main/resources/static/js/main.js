@@ -156,7 +156,6 @@ $('#hostIpForm').submit(function(e){
         success:function(data) {
             updateHostTable();
             $("#hostIpValidationMsg").text(data);
-
         }
     });
 });
@@ -166,7 +165,6 @@ var chosenHostId;
 $('#portForm').submit(function(e){
     e.preventDefault();
     var dataToSend = $('#portForm').serialize() + "&hostId=" + chosenHostId;
-    console.log(dataToSend)
     if(chosenHostId !== 0) {
         $.ajax({
             url:'/ports',
@@ -179,6 +177,21 @@ $('#portForm').submit(function(e){
         });
         showPortsForHost(chosenHostId);
     }
+});
+
+$('#monitoringForm').submit(function(e){
+    e.preventDefault();
+    $.ajax({
+        url:'/hosts/monitoring',
+        type:'post',
+        data: $(this).serialize(),
+        success:function(data) {
+            console.log(data)
+            $("#monitoringValidationMsg").text(data);
+            updateMonitoringHostTable();
+        }
+    });
+
 });
 
 intervalId = setInterval(updateHostTable, 3000);

@@ -25,4 +25,21 @@ public class MonitoringHostsController {
         return monitoringHostRepository.findById(id);
     }
 
+    @PostMapping
+    public String create(@RequestParam String ip) {
+        if (!ip.matches(
+                "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+                        "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+                        "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+                        "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$"))
+            return "Неверный формат IP-адреса";
+
+        if (monitoringHostRepository.findMonitoringHostByIpAddress(ip).isPresent())
+            return "Хост уже есть в списке";
+
+        monitoringHostRepository.save(new MonitoringHost(ip));
+
+        return "";
+    }
+
 }
