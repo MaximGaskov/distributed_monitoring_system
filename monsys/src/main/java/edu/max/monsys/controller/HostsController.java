@@ -4,6 +4,7 @@ import edu.max.monsys.entity.Host;
 import edu.max.monsys.repository.HostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -23,22 +24,20 @@ class HostsController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String create(@RequestParam String ip) {
-//        Preconditions.checkNotNull(resource);
+    public ResponseEntity<String> create(@RequestParam String ip) {
 
         if (!ip.matches(
                 "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                     "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                     "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                     "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$"))
-                return "Неверный формат IP-адреса";
-
-        if (hostRepository.findHostByIpAddress(ip).isPresent())
-            return "Хост уже есть в списке";
+                return new ResponseEntity<>("Неверный формат IP-адреса", HttpStatus.BAD_REQUEST);
+        else if (hostRepository.findHostByIpAddress(ip).isPresent())
+            return new ResponseEntity<>("Хост уже есть в списке", HttpStatus.BAD_REQUEST);
 
         hostRepository.save(new Host(ip));
 
-        return "";
+        return ResponseEntity.ok("");
     }
 
 }

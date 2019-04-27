@@ -5,6 +5,8 @@ import edu.max.monsys.entity.Port;
 import edu.max.monsys.repository.HostRepository;
 import edu.max.monsys.repository.PortRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -27,29 +29,34 @@ class PortsController {
     }
 
     @PostMapping
-    public String addByHostId(@RequestParam("port") String portNumber, @RequestParam("hostId") String hostId) {
+    public ResponseEntity<String> addByHostId(@RequestParam("port") String portNumber, @RequestParam("hostId") String hostId) {
 
         if (!portNumber.matches("\\d+"))
-            return "Недопустимый номер порта";
+            return new ResponseEntity<>("Недопустимый формат порта", HttpStatus.BAD_REQUEST);
+        if (!hostId.matches("\\d+"))
+            return new ResponseEntity<>("Хост не выбран", HttpStatus.BAD_REQUEST);
 
-        int port = Integer.valueOf(portNumber);
+        long port = Long.valueOf(portNumber);
         int hId = Integer.valueOf(hostId);
 
 
         if (port < 0 || port > 65535)
-            return "Недопустимый номер порта";
+            return new ResponseEntity<>("Недопустимый номер порта", HttpStatus.BAD_REQUEST);
 
-        if (hostRepository.findById(hId).get().getPorts().stream()
+        else if (hostRepository.findById(hId).get().getPorts().stream()
                 .anyMatch(o -> o.getNumber() == port))
-            return "Порт уже добавлен";
+            return new ResponseEntity<>("Порт уже добавлен", HttpStatus.BAD_REQUEST);
 
-        Port p = new Port(port);
+        Port p = new Port((int)port);
 
-        hostRepository.findById(hId).get().addPort(p);
-        portRepository.save(p);
+        hostRepository.findById(hId).ifPresent(x->x.addPort(p));
+        if (hostRepository.findById(hId).isPresent())
+            portRepository.save(p);
+        else
+            return new ResponseEntity<>("Хост отсутствует", HttpStatus.BAD_REQUEST);
 
 
-        return "";
+        return ResponseEntity.ok("");
     }
 
 }

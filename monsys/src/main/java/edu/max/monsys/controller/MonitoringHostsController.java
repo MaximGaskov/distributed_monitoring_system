@@ -1,8 +1,11 @@
 package edu.max.monsys.controller;
 
+import edu.max.monsys.entity.Host;
 import edu.max.monsys.entity.MonitoringHost;
 import edu.max.monsys.repository.MonitoringHostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -26,20 +29,20 @@ public class MonitoringHostsController {
     }
 
     @PostMapping
-    public String create(@RequestParam String ip) {
+    public ResponseEntity<String> create(@RequestParam String ip) {
+
         if (!ip.matches(
                 "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                         "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                         "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                         "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$"))
-            return "Неверный формат IP-адреса";
-
-        if (monitoringHostRepository.findMonitoringHostByIpAddress(ip).isPresent())
-            return "Хост уже есть в списке";
+            return new ResponseEntity<>("Неверный формат IP-адреса", HttpStatus.BAD_REQUEST);
+        else if (monitoringHostRepository.findMonitoringHostByIpAddress(ip).isPresent())
+            return new ResponseEntity<>("Хост уже есть в списке", HttpStatus.BAD_REQUEST);
 
         monitoringHostRepository.save(new MonitoringHost(ip));
 
-        return "";
+        return ResponseEntity.ok("");
     }
 
 }

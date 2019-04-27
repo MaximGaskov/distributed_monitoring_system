@@ -153,9 +153,11 @@ $('#hostIpForm').submit(function(e){
         url:'/hosts',
         type:'post',
         data:$('#hostIpForm').serialize(),
-        success:function(data) {
+        success:function() {
             updateHostTable();
-            $("#hostIpValidationMsg").text(data);
+        },
+        error: function (data) {
+            $("#hostIpValidationMsg").text(data.responseText);
         }
     });
 });
@@ -170,12 +172,13 @@ $('#portForm').submit(function(e){
             url:'/ports',
             type:'post',
             data: dataToSend,
-            success:function(data) {
-                $("#portValidationMsg").text(data);
+            success:function() {
                 showPortsForHost(chosenHostId);
+            },
+            error: function (data) {
+                $("#portValidationMsg").text(data.responseText);
             }
         });
-        showPortsForHost(chosenHostId);
     }
 });
 
@@ -184,14 +187,14 @@ $('#monitoringForm').submit(function(e){
     $.ajax({
         url:'/hosts/monitoring',
         type:'post',
-        data: $(this).serialize(),
-        success:function(data) {
-            console.log(data)
-            $("#monitoringValidationMsg").text(data);
+        data:$(this).serialize(),
+        success:function() {
             updateMonitoringHostTable();
+        },
+        error: function (data) {
+            $("#monitoringValidationMsg").text(data.responseText);
         }
     });
-
 });
 
 intervalId = setInterval(updateHostTable, 3000);
