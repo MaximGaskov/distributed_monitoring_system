@@ -77,7 +77,6 @@ function showPortsForHost(id) {
         var portRow = [];
 
         jQuery(data).each(function (i, portEntity) {
-
             var statusColor;
 
             if (portEntity.up)
@@ -85,7 +84,7 @@ function showPortsForHost(id) {
             else
                 statusColor = "red";
 
-            portRow.push("<tr>" +
+            portRow.push("<tr id='" + portEntity.id + "'>" +
                 "<th scope='row'>" + portEntity.number + "</th>" +
                 "<td><i>" + portEntity.service + "</i></td>" +
                 "<td>" +
@@ -200,12 +199,24 @@ $('#monitoringForm').submit(function(e){
 $(document).on("click", "#hTable tbody a", function (e) {
 
     e.preventDefault();
-    console.log($(this).parent().parent().attr('id'));
     $.ajax({
         url:'/hosts/' + $(this).parent().parent().attr('id'),
         type: 'delete',
         success: function () {
             updateHostTable();
+        }
+    })
+
+});
+
+$(document).on("click", "#pTable tbody a", function (e) {
+
+    e.preventDefault();
+    $.ajax({
+        url:'/ports/' + $(this).parent().parent().attr('id'),
+        type: 'delete',
+        success: function () {
+            showPortsForHost(chosenHostId);
         }
     })
 

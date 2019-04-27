@@ -59,5 +59,11 @@ class PortsController {
         return ResponseEntity.ok("");
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+        portRepository.findById(id).ifPresent(x->x.getHost().getPorts().removeIf(y -> y.getId().equals(id)));
+        portRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }
 
