@@ -141,9 +141,12 @@ $(document).on("click", "#hTable tbody tr", function () {
     }
 });
 
+
+var activeMonitoringHost;
 $(document).on("click", "#mTable tbody a", function () {
     $("#modalLabel").html("Цели хоста мониторинга <i>" + $(this).parent().parent().find("th").text() + "</i>");
     updateModalContent( $(this).attr('id'));
+    activeMonitoringHost = $(this).attr('id');
 });
 
 $('#hostIpForm').submit(function(e){
@@ -221,6 +224,17 @@ $(document).on("click", "#pTable tbody a", function (e) {
     })
 
 });
+
+$("#mhostDelete").click(function () {
+    $.ajax({
+        url:'/hosts/monitoring/' + activeMonitoringHost,
+        type: 'delete',
+        success: function () {
+            updateMonitoringHostTable();
+        }
+    })
+});
+
 
 intervalId = setInterval(updateHostTable, 3000);
 intervalId = setInterval(updateMonitoringHostTable, 3000);

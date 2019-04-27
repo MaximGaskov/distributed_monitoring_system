@@ -45,4 +45,11 @@ public class MonitoringHostsController {
         return ResponseEntity.ok("");
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+        monitoringHostRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
+
 }
