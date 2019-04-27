@@ -197,5 +197,19 @@ $('#monitoringForm').submit(function(e){
     });
 });
 
+$(document).on("click", "#hTable tbody a", function (e) {
+
+    e.preventDefault();
+    console.log($(this).parent().parent().attr('id'));
+    $.ajax({
+        url:'/hosts/' + $(this).parent().parent().attr('id'),
+        type: 'delete',
+        success: function () {
+            updateHostTable();
+        }
+    })
+
+});
+
 intervalId = setInterval(updateHostTable, 3000);
 intervalId = setInterval(updateMonitoringHostTable, 3000);

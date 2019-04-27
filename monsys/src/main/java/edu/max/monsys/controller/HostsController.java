@@ -40,4 +40,10 @@ class HostsController {
         return ResponseEntity.ok("");
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+        hostRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
