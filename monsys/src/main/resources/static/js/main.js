@@ -157,6 +157,8 @@ $('#hostIpForm').submit(function(e){
         data:$('#hostIpForm').serialize(),
         success:function() {
             updateHostTable();
+            updateMonitoringHostTable();
+            $("#hostIpValidationMsg").text('');
         },
         error: function (data) {
             $("#hostIpValidationMsg").text(data.responseText);
@@ -176,6 +178,7 @@ $('#portForm').submit(function(e){
             data: dataToSend,
             success:function() {
                 showPortsForHost(chosenHostId);
+                $("#hostIpValidationMsg").text('');
             },
             error: function (data) {
                 $("#portValidationMsg").text(data.responseText);
@@ -192,6 +195,7 @@ $('#monitoringForm').submit(function(e){
         data:$(this).serialize(),
         success:function() {
             updateMonitoringHostTable();
+            $("#hostIpValidationMsg").text('');
         },
         error: function (data) {
             $("#monitoringValidationMsg").text(data.responseText);
@@ -207,6 +211,10 @@ $(document).on("click", "#hTable tbody a", function (e) {
         type: 'delete',
         success: function () {
             updateHostTable();
+            showPortsForHost('');
+            $("#portsTableLabel").html("Список портов");
+
+            updateMonitoringHostTable();
         }
     })
 
