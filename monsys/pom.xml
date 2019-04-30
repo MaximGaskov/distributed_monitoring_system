@@ -11,6 +11,7 @@
     <groupId>edu.max</groupId>
     <artifactId>monsys</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <name>monsys</name>
     <description>Demo project for Spring Boot</description>
 

@@ -109,6 +109,7 @@ function updateModalContent(monitoringHostId) {
     $.getJSON('/hosts/monitoring/' + monitoringHostId, function (data) {
 
         var hostRow = [];
+        console.log(data);
 
         jQuery(data.targets).each(function (i, hostEntity) {
 
@@ -195,7 +196,7 @@ $('#monitoringForm').submit(function(e){
         data:$(this).serialize(),
         success:function() {
             updateMonitoringHostTable();
-            $("#hostIpValidationMsg").text('');
+            $("#monitoringValidationMsg").text('');
         },
         error: function (data) {
             $("#monitoringValidationMsg").text(data.responseText);
