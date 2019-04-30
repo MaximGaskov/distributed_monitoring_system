@@ -25,7 +25,7 @@ public class MonitoringHost {
     private String ipAddress;
 
     @OneToMany
-    @JoinColumn(name = "observer_id", nullable = false)
+    @JoinColumn(name = "observer_id")
     private Set<Host> targets = new HashSet<>();
 
     public MonitoringHost(String ipAddress) {

@@ -240,6 +240,10 @@ $("#mhostDelete").click(function () {
         type: 'delete',
         success: function () {
             updateMonitoringHostTable();
+            $("#monitoringValidationMsg").text('');
+        },
+        error: function (data) {
+            $("#monitoringValidationMsg").text(data.responseText);
         }
     })
 });

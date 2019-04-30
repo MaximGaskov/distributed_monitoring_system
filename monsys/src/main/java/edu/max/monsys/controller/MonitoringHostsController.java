@@ -47,8 +47,11 @@ public class MonitoringHostsController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
-        monitoringHostRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
+        if (monitoringHostRepository.count() == 1)
+            return new ResponseEntity<>("Сперва добавьте другой хост мониторинга", HttpStatus.BAD_REQUEST);
+        else
+            monitoringHostRepository.deleteById(id);
+        return ResponseEntity.ok("");
     }
 
 
