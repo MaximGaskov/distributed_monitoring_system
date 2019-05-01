@@ -59,6 +59,7 @@ function updateMonitoringHostTable() {
 
             rowData.push("<tr>" +
                 "<th scope='row'>" + mHostEntity.ipAddress + "</th>" +
+                "<td>" + mHostEntity.anotherMHIpAdress + "</td>" +
                 "<td>" + mHostEntity.targets.length + "</td>" +
                 "<td><a id='" + mHostEntity.id + "' data-toggle=\"modal\" " +
                 "data-target=\"#monitoringSettings\" href=\"#\">Подробности</a></td>" +
@@ -249,5 +250,5 @@ $("#mhostDelete").click(function () {
 });
 
 
-intervalId = setInterval(updateHostTable, 30000);
-intervalId = setInterval(updateMonitoringHostTable, 30000);
+intervalId = setInterval(updateHostTable, 3000);
+intervalId = setInterval(updateMonitoringHostTable, 3000);
