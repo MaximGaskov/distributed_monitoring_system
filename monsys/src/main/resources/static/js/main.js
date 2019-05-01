@@ -249,5 +249,5 @@ $("#mhostDelete").click(function () {
 });
 
 
-intervalId = setInterval(updateHostTable, 3000);
-intervalId = setInterval(updateMonitoringHostTable, 3000);
+intervalId = setInterval(updateHostTable, 30000);
+intervalId = setInterval(updateMonitoringHostTable, 30000);

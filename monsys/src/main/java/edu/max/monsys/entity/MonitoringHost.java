@@ -24,6 +24,9 @@ public class MonitoringHost {
     @Column(name = "ip_addr", nullable = false, unique = true)
     private String ipAddress;
 
+    @Column(name = "another_mh_ip_addr")
+    private String anotherMHIpAdress;
+
     @OneToMany
     @JoinColumn(name = "observer_id")
     private Set<Host> targets = new HashSet<>();

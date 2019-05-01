@@ -2,6 +2,7 @@ package edu.max.monsys.controller;
 
 import edu.max.monsys.entity.Host;
 import edu.max.monsys.entity.MonitoringHost;
+import edu.max.monsys.monitoring.ClusterSelfMonitoringHandler;
 import edu.max.monsys.repository.MonitoringHostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,8 @@ public class MonitoringHostsController {
     @Autowired
     private MonitoringHostRepository monitoringHostRepository;
 
+    @Autowired
+    ClusterSelfMonitoringHandler clusterSelfMonitoringHandler;
 
     @GetMapping
     public Iterable<MonitoringHost> findAll() {
@@ -40,7 +43,14 @@ public class MonitoringHostsController {
         else if (monitoringHostRepository.findMonitoringHostByIpAddress(ip).isPresent())
             return new ResponseEntity<>("Хост уже есть в списке", HttpStatus.BAD_REQUEST);
 
-        monitoringHostRepository.save(new MonitoringHost(ip));
+        MonitoringHost addedMHost = new MonitoringHost(ip);
+
+        monitoringHostRepository.save(addedMHost);
+
+        if (monitoringHostRepository.count() > 1) {
+            clusterSelfMonitoringHandler.reassignClusterSelfMonitoringOnMHostAdding(addedMHost.getId());
+        }
+
 
         return ResponseEntity.ok("");
     }
@@ -49,10 +59,13 @@ public class MonitoringHostsController {
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
         if (monitoringHostRepository.count() == 1)
             return new ResponseEntity<>("Сперва добавьте другой хост мониторинга", HttpStatus.BAD_REQUEST);
-        else
+        else {
+            clusterSelfMonitoringHandler.reassignClusterSelfMonitoringOnMHostDeletion(id);
             monitoringHostRepository.deleteById(id);
+        }
         return ResponseEntity.ok("");
     }
+
 
 
 }
