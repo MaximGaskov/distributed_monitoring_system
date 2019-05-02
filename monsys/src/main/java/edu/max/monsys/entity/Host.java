@@ -30,10 +30,6 @@ public class Host {
     @Column(name = "domain", columnDefinition = "varchar(255) default 'неизвестно'")
     private String domainName;
 
-    @Column(name = "host_is_up")
-    private boolean up;
-
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, mappedBy = "host")
     private Set<Port> ports = new HashSet<>();
 
@@ -54,7 +50,6 @@ public class Host {
                 "id=" + id +
                 ", ipAddress='" + ipAddress + '\'' +
                 ", domainName='" + domainName + '\'' +
-                ", up=" + up +
                 '}';
     }
 }

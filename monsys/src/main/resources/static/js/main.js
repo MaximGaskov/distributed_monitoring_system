@@ -6,22 +6,23 @@ function updateHostTable() {
         jQuery(data).each(function(i, hostEntity){
 
             var statusColor;
+            var portStatus = [];
+            var downPortsCounter = 0;
 
-            if (hostEntity.up === false) {
+
+            jQuery(hostEntity.ports).each(function (i, portEntity) {
+                portStatus.push(portEntity.up);
+                if (portEntity.up === false)
+                    downPortsCounter += 1;
+            });
+
+            if (downPortsCounter === portStatus.length)
                 statusColor = "red";
-            }
-            else {
-                var portStatus = [];
+            else if (downPortsCounter < portStatus.length)
+                statusColor = "yellow";
+            else
+                statusColor = "green";
 
-                jQuery(hostEntity.ports).each(function (i, portEntity) {
-                    portStatus.push(portEntity.up);
-                });
-
-                if (jQuery.inArray(false, portStatus))
-                    statusColor = "yellow";
-                else
-                    statusColor = "green";
-            }
 
             if ($("#hTable #" + hostEntity.id).hasClass("activeRow")){
                 showPortsForHost(hostEntity.id);

@@ -1,15 +1,22 @@
 package edu.max.monsys.monitoring;
 
+import edu.max.monsys.entity.Host;
+import edu.max.monsys.entity.Port;
+import edu.max.monsys.repository.HostRepository;
+import edu.max.monsys.repository.MonitoringHostRepository;
+import edu.max.monsys.repository.PortRepository;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPCmd;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.commons.net.pop3.POP3Client;
 import org.apache.commons.net.smtp.SMTPClient;
 import org.apache.commons.net.smtp.SMTPReply;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,15 +32,51 @@ public class MonitoringHandler {
 
     private final int CONNECTION_TIMEOUT = 1000; //ms
 
+    @Autowired
+    private HostRepository hostRepository;
+
+    @Autowired
+    private PortRepository portRepository;
+
+    @Autowired
+    private MonitoringHostRepository monitoringHostRepository;
+
     @Value("${server.address}")
     private String myIP;
 
 
     @Scheduled(fixedDelay = 10000)
+    @Transactional
     public void check() {
-        ftpPortCheck("185.54.136.70", 21); //ftp.mccme.ru
-        System.out.println(myIP);
+//        ftpPortCheck("185.54.136.70", 21); //ftp.mccme.ru
+//        System.out.println(myIP);
 
+        for (Host host : hostRepository.findAll()) {
+            for (Port port : host.getPorts()) {
+
+                if (ftpPortCheck(host.getIpAddress(), port.getNumber())) {
+                    port.setUp(true);
+                    port.setService("FTP");
+                } else if (httpPortCheck(host.getIpAddress(), port.getNumber())) {
+                    port.setUp(true);
+                    port.setService("HTTP");
+
+                } else if (smtpPortCheck(host.getIpAddress(), port.getNumber())) {
+                    port.setUp(true);
+                    port.setService("SMTP");
+
+                } else if (pop3PortCheck(host.getIpAddress(), port.getNumber())) {
+                    port.setUp(true);
+                    port.setService("POP3");
+
+                } else {
+                    port.setUp(false);
+                }
+            }
+
+        }
+
+        this.hostRepository.flush();
     }
 
 
@@ -80,7 +123,7 @@ public class MonitoringHandler {
         return false;
     }
 
-    public int httpPortCheck(String hostname, int port) {
+    public boolean httpPortCheck(String hostname, int port) {
 
         Socket s = new Socket();
 
@@ -100,13 +143,13 @@ public class MonitoringHandler {
 
                 if (!response.matches("HTTP/.*")){
                     System.out.println("ERROR: not HTTP protocol on " + hostname + ":" +port);
-                    return -1;
+                    return false;
                 } else {
                     Scanner sc = new Scanner(response);
                     sc.next();
                     int status = sc.nextInt();
                     System.out.println("HTTP: IS WORKING (STATUS : " + status + ") on " + hostname + ":" +port);
-                    return status;
+                    return true;
                 }
 
             } catch (IOException e) {
@@ -127,7 +170,7 @@ public class MonitoringHandler {
 
         }
 
-        return -1;
+        return false;
 
     }
 
