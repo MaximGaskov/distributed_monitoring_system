@@ -16,9 +16,10 @@ function updateHostTable() {
                     downPortsCounter += 1;
             });
 
+
             if (downPortsCounter === portStatus.length)
                 statusColor = "red";
-            else if (downPortsCounter < portStatus.length)
+            else if (downPortsCounter > 0 && downPortsCounter < portStatus.length)
                 statusColor = "yellow";
             else
                 statusColor = "green";

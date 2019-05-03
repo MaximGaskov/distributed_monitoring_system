@@ -21,10 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.Scanner;
 
 @Component
@@ -80,7 +77,7 @@ public class MonitoringHandler {
     }
 
 
-    public boolean ftpPortCheck(String hostname, int port) {
+    private boolean ftpPortCheck(String hostname, int port) {
 
 
         InetAddress host;
@@ -110,7 +107,7 @@ public class MonitoringHandler {
                     return false;
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
 //            System.out.println("FTP connection to" + hostname + ":" + port + " failed");
         } finally {
             try {
@@ -123,58 +120,30 @@ public class MonitoringHandler {
         return false;
     }
 
-    public boolean httpPortCheck(String hostname, int port) {
+    private boolean httpPortCheck(String hostname, int port) {
 
-        Socket s = new Socket();
-
+        HttpURLConnection con = null;
         try {
+            URL url = new URL("http://" + hostname + ":" + port);
+            System.out.println(hostname);
+            con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            con.setConnectTimeout(CONNECTION_TIMEOUT);
+            con.setRequestProperty("User-Agent", "Mozilla 5.0 (Windows; U; "
+                    + "Windows NT 5.1; en-US; rv:1.8.0.11) ");
+            int status = con.getResponseCode();
+            return status != -1;
 
-            s.connect(new InetSocketAddress(hostname, port),CONNECTION_TIMEOUT);
-
-            PrintWriter pw = new PrintWriter(s.getOutputStream());
-            pw.println("HEAD / HTTP/1.0");
-            pw.println("Host: " + hostname);
-            pw.println("");
-            pw.flush();
-
-            try(BufferedReader br = new BufferedReader(new InputStreamReader(s.getInputStream()))) {
-
-                String response = br.readLine();
-
-                if (!response.matches("HTTP/.*")){
-                    System.out.println("ERROR: not HTTP protocol on " + hostname + ":" +port);
-                    return false;
-                } else {
-                    Scanner sc = new Scanner(response);
-                    sc.next();
-                    int status = sc.nextInt();
-                    System.out.println("HTTP: IS WORKING (STATUS : " + status + ") on " + hostname + ":" +port);
-                    return true;
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            System.out.println("HTTP: " + hostname + " port " + port + " is closed or connection problem");
+            e.printStackTrace();
+            return false;
         } finally {
-
-            try {
-                s.close();
-            } catch (IOException e) {
-                System.out.println("ERROR while closing socket (HTTP " + hostname + ":" + port + ")");
-                e.printStackTrace();
-            }
-
+            if (con != null)
+                con.disconnect();
         }
-
-        return false;
-
     }
 
-    public boolean smtpPortCheck(String hostname, int port) {
+    private boolean smtpPortCheck(String hostname, int port) {
 
         InetAddress host;
         try {
@@ -203,7 +172,7 @@ public class MonitoringHandler {
                     return false;
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("SMTP connection to" + hostname + ":" + port + " failed");
         } finally {
             try {
@@ -216,7 +185,7 @@ public class MonitoringHandler {
         return false;
     }
 
-    public boolean pop3PortCheck(String hostname, int port) {
+    private boolean pop3PortCheck(String hostname, int port) {
 
         InetAddress host;
         try {
@@ -234,7 +203,7 @@ public class MonitoringHandler {
             System.out.println("POP3 is working on " + hostname + ":" + port);
             return true;
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("POP3 connection to" + hostname + ":" + port + " failed");
         } finally {
             try {
