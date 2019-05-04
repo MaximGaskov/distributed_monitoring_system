@@ -23,6 +23,19 @@
 
 <div class="bg">
     <div class="container pt-2 mt-2 pb-2">
+        <form id="rateForm" class="row">
+            <div class="col-3 text-center">
+                <b>Частота мониторинга (мин.):</b>
+            </div>
+            <div class="col-md-1 text-center" id="rangeVal" type="text">1</div>
+            <div class="slidecontainer col-md-6">
+                <input name="rateVal" defaultValue="1" type="range" min="1" max="60" value="1" class="slider" id="idRangeSlider">
+            </div>
+            <div class="col-1 ml-auto mr-auto">
+                <button type="submit" class="btn btn-secondary float-right" id="rateButton">Установить</button>
+            </div>
+        </form>
+
         <div class="row">
             <div class="col-md-7 pr-1">
                 <div class="module top-module">

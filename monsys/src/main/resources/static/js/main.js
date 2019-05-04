@@ -251,6 +251,33 @@ $("#mhostDelete").click(function () {
     })
 });
 
+$("#idRangeSlider").on("input", function() {
+
+    $("#rangeVal").text($(this).val());
+
+    $("#rateButton").removeClass("btn-secondary");
+    $("#rateButton").addClass("btn-primary");
+    $("#rateButton").prop("disabled", false);
+});
+
+
+$("#rateForm").submit(function(e) {
+   e.preventDefault();
+   console.log($(this).serialize());
+    $.ajax({
+        url:'/hosts/monitoring/rate/',
+        type:'post',
+        data:$(this).serialize()
+    });
+});
+
+$("#rateButton").on("click", function () {
+
+    $(this).removeClass("btn-primary");
+    $(this).addClass("btn-secondary");
+    $(this).prop("disabled", true);
+});
+
 
 intervalId = setInterval(updateHostTable, 3000);
 intervalId = setInterval(updateMonitoringHostTable, 3000);
