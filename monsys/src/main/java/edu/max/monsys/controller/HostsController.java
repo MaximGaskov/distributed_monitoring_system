@@ -1,17 +1,12 @@
 package edu.max.monsys.controller;
 
 import edu.max.monsys.entity.Host;
-import edu.max.monsys.entity.MonitoringHost;
 import edu.max.monsys.repository.HostRepository;
 import edu.max.monsys.repository.MonitoringHostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/hosts")

@@ -1,7 +1,6 @@
 package edu.max.monsys.controller;
 
 import edu.max.monsys.entity.ConfigMonitoringRate;
-import edu.max.monsys.entity.Host;
 import edu.max.monsys.entity.MonitoringHost;
 import edu.max.monsys.monitoring.ClusterSelfMonitoringHandler;
 import edu.max.monsys.repository.ConfigRepository;
@@ -75,13 +74,12 @@ public class MonitoringHostsController {
     @PostMapping("/rate")
     public void setMonitoringRate(@RequestParam int rateVal) {
 
-//        System.out.println(rateVal);
-//        Integer rate = Integer.valueOf(rateVal);
         if (configRepository.count() == 0)
             configRepository.save(new ConfigMonitoringRate());
-
+        else  {
         configRepository.findById(0).get().setRateSeconds(rateVal * 60);
         configRepository.flush();
+        }
     }
 
 }

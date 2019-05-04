@@ -1,13 +1,11 @@
 package edu.max.monsys.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Set;
 

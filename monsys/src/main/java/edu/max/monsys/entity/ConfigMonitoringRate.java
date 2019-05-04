@@ -1,7 +1,6 @@
 package edu.max.monsys.entity;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;

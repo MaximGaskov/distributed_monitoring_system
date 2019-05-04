@@ -2,10 +2,8 @@ package edu.max.monsys.monitoring;
 
 import edu.max.monsys.entity.Host;
 import edu.max.monsys.entity.Port;
-import edu.max.monsys.repository.ConfigRepository;
 import edu.max.monsys.repository.HostRepository;
 import edu.max.monsys.repository.MonitoringHostRepository;
-import edu.max.monsys.repository.PortRepository;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPCmd;
 import org.apache.commons.net.ftp.FTPReply;
@@ -13,18 +11,10 @@ import org.apache.commons.net.pop3.POP3Client;
 import org.apache.commons.net.smtp.SMTPClient;
 import org.apache.commons.net.smtp.SMTPReply;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import javax.transaction.Transactional;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.*;
 import java.util.Date;
-import java.util.Scanner;
 
 
 public class MonitoringHandler {
