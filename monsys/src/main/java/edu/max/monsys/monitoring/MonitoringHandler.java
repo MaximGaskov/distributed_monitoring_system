@@ -53,11 +53,9 @@ public class MonitoringHandler {
                 } else if (smtpPortCheck(host.getIpAddress(), port.getNumber())) {
                     port.setUp(true);
                     port.setService("SMTP");
-
                 } else if (pop3PortCheck(host.getIpAddress(), port.getNumber())) {
                     port.setUp(true);
                     port.setService("POP3");
-
                 } else {
                     port.setUp(false);
                 }
@@ -76,7 +74,7 @@ public class MonitoringHandler {
         try {
             host = InetAddress.getByName(hostname);
         } catch (UnknownHostException e) {
-            //System.out.println("Unknown host : " + hostname);
+            e.printStackTrace();
             return false;
         }
 
@@ -91,23 +89,15 @@ public class MonitoringHandler {
                 return false;
             } else {
                 ftp.sendCommand(FTPCmd.USER, "user");
-                if (ftp.getReplyCode() == 331 || ftp.getReplyCode() == 332) {
-                    //System.out.println("FTP is working on " + hostname + ":" + port);
-                    return true;
-                } else {
-                    //System.out.println("FTP connection to" + hostname + ":" + port + " failed");
-                    return false;
-                }
+                return ftp.getReplyCode() == 331 || ftp.getReplyCode() == 332;
             }
         } catch (Exception e) {
-//            //System.out.println("FTP connection to" + hostname + ":" + port + " failed");
             return false;
         } finally {
             try {
                 ftp.disconnect();
             } catch (Exception e) {
                 return false;
-//                //System.out.println("FTP disconnection problems on " + hostname + ":" + port + " failed");
             }
         }
     }
@@ -141,7 +131,6 @@ public class MonitoringHandler {
         try {
             host = InetAddress.getByName(hostname);
         } catch (UnknownHostException e) {
-            //System.out.println("Unknown host : " + hostname);
             return false;
         }
 
@@ -152,27 +141,18 @@ public class MonitoringHandler {
             int reply = smtp.getReplyCode();
 
             if (!SMTPReply.isPositiveCompletion(reply)) {
-                //System.out.println("SMTP bad response (" + smtp.getReplyCode() + ") on " + hostname + ":" + port);
                 return false;
             } else {
                 smtp.sendCommand("HELO ME");
-                if (smtp.getReplyCode() == 250) {
-                    //System.out.println("SMTP is working on " + hostname + ":" + port);
-                    return true;
-                } else {
-                    //System.out.println("SMTP connection to" + hostname + ":" + port + " failed");
-                    return false;
-                }
+                return smtp.getReplyCode() == 250;
             }
         } catch (Exception e) {
-            //System.out.println("SMTP connection to" + hostname + ":" + port + " failed");
             return false;
         } finally {
             try {
                 smtp.disconnect();
             } catch (Exception e) {
                 return false;
-                //System.out.println("SMTP disconnection problems on " + hostname + ":" + port + " failed");
             }
         }
 
@@ -184,7 +164,6 @@ public class MonitoringHandler {
         try {
             host = InetAddress.getByName(hostname);
         } catch (UnknownHostException e) {
-            //System.out.println("Unknown host : " + hostname);
             return false;
         }
 
@@ -193,17 +172,14 @@ public class MonitoringHandler {
             pop3.setConnectTimeout(CONNECTION_TIMEOUT);
             pop3.connect(host, port);
 
-            //System.out.println("POP3 is working on " + hostname + ":" + port);
             return true;
 
         } catch (Exception e) {
-            //System.out.println("POP3 connection to" + hostname + ":" + port + " failed");
             return false;
         } finally {
             try {
                 pop3.disconnect();
             } catch (IOException e) {
-                //System.out.println("POP3 disconnection problems on " + hostname + ":" + port + " failed");
                 return false;
             }
         }
