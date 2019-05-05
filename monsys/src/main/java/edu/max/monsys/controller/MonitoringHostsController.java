@@ -1,9 +1,11 @@
 package edu.max.monsys.controller;
 
 import edu.max.monsys.entity.ConfigMonitoringRate;
+import edu.max.monsys.entity.Log;
 import edu.max.monsys.entity.MonitoringHost;
 import edu.max.monsys.monitoring.ClusterSelfMonitoringHandler;
 import edu.max.monsys.repository.ConfigRepository;
+import edu.max.monsys.repository.LogRepository;
 import edu.max.monsys.repository.MonitoringHostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,9 @@ public class MonitoringHostsController {
 
     @Autowired
     ClusterSelfMonitoringHandler clusterSelfMonitoringHandler;
+
+    @Autowired
+    private LogRepository logRepository;
 
     @GetMapping
     public Iterable<MonitoringHost> findAll() {
@@ -80,6 +85,11 @@ public class MonitoringHostsController {
         configRepository.findById(0).get().setRateSeconds(rateVal * 60);
         configRepository.flush();
         }
+    }
+
+    @GetMapping("/log")
+    public Iterable<Log> getLogs() {
+        return logRepository.findAll();
     }
 
 }

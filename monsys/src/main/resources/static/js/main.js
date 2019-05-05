@@ -74,6 +74,25 @@ function updateMonitoringHostTable() {
     });
 }
 
+function updateLogsTable() {
+    $.getJSON('/hosts/monitoring/log', function (data) {
+
+        var rowData = [];
+
+        jQuery(data).each(function(i, logEntity){
+
+            rowData.push("<tr>" +
+                "<td>" + logEntity.date + "</td>" +
+                "<td><b>" + logEntity.host + " : " + logEntity.port + "</b></td>" +
+                "<td><i>" + logEntity.event + "</i></td>"+
+                "</tr>")
+        });
+
+        $("#lTable tbody tr").remove();
+        $("#lTable tbody").append(rowData.join(""));
+    });
+}
+
 function showPortsForHost(id) {
     $.getJSON('/ports/' + id, function (data) {
 
@@ -281,3 +300,4 @@ $("#rateButton").on("click", function () {
 
 intervalId = setInterval(updateHostTable, 3000);
 intervalId = setInterval(updateMonitoringHostTable, 3000);
+intervalId = setInterval(updateLogsTable, 3000);

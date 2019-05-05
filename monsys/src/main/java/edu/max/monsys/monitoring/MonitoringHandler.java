@@ -1,9 +1,10 @@
 package edu.max.monsys.monitoring;
 
 import edu.max.monsys.entity.Host;
+import edu.max.monsys.entity.Log;
 import edu.max.monsys.entity.Port;
 import edu.max.monsys.repository.HostRepository;
-import edu.max.monsys.repository.MonitoringHostRepository;
+import edu.max.monsys.repository.LogRepository;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPCmd;
 import org.apache.commons.net.ftp.FTPReply;
@@ -12,9 +13,15 @@ import org.apache.commons.net.smtp.SMTPClient;
 import org.apache.commons.net.smtp.SMTPReply;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.transaction.Transactional;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 
 public class MonitoringHandler {
@@ -24,9 +31,8 @@ public class MonitoringHandler {
     @Autowired
     private HostRepository hostRepository;
 
-
     @Autowired
-    private MonitoringHostRepository monitoringHostRepository;
+    private LogRepository logRepository;
 
 //    @Value("${server.address}")
 //    private String myIP;
@@ -38,27 +44,43 @@ public class MonitoringHandler {
     public void check() {
 //        ftpPortCheck("185.54.136.70", 21); //ftp.mccme.ru
 //        //System.out.println(myIP);
-        System.out.println(new Date().toString());
 
         for (Host host : hostRepository.findAll()) {
             for (Port port : host.getPorts()) {
 
                 if (ftpPortCheck(host.getIpAddress(), port.getNumber())) {
+                    logPortIsUp(host, port);
                     port.setUp(true);
                     port.setService("FTP");
                 } else if (httpPortCheck(host.getIpAddress(), port.getNumber())) {
+                    logPortIsUp(host, port);
                     port.setUp(true);
                     port.setService("HTTP");
-
                 } else if (smtpPortCheck(host.getIpAddress(), port.getNumber())) {
+                    logPortIsUp(host, port);
                     port.setUp(true);
                     port.setService("SMTP");
                 } else if (pop3PortCheck(host.getIpAddress(), port.getNumber())) {
+                    logPortIsUp(host, port);
                     port.setUp(true);
                     port.setService("POP3");
+                } else if (sshCheck(host.getIpAddress(), port.getNumber())) {
+                    logPortIsUp(host, port);
+                    port.setUp(true);
+                    port.setService("SSH");
                 } else {
+                    if (port.isUp()) {
+                        Date date = new Date();
+                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        df.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+
+                        logRepository.save(
+                                new Log(df.format(date), host.getIpAddress(), port.getNumber(), "недоступен"));
+                        logRepository.flush();
+                    }
                     port.setUp(false);
                 }
+
             }
 
         }
@@ -184,5 +206,48 @@ public class MonitoringHandler {
             }
         }
 
+    }
+
+    private boolean sshCheck(String hostname, int port) {
+
+        Socket socket = null;
+        try {
+            socket = new Socket();
+            socket.connect(new InetSocketAddress(hostname,port), CONNECTION_TIMEOUT);
+            InputStreamReader streamReader= new InputStreamReader(socket.getInputStream());
+            BufferedReader reader= new BufferedReader(streamReader);
+
+            String greeting= reader.readLine();
+
+            boolean isSSH;
+            isSSH = greeting.contains("SSH");
+
+            reader.close();
+
+            return isSSH;
+
+        } catch(Exception e) {
+            return false;
+        }finally{
+            if(socket != null){
+                try {
+                    socket.close();
+                }catch(IOException e){
+                    return false;
+                }
+            }
+        }
+
+    }
+
+    private void logPortIsUp (Host host, Port port) {
+        if (!port.isUp()) {
+            Date date = new Date();
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            df.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+            logRepository.save(
+                    new Log(df.format(date), host.getIpAddress(), port.getNumber(), "доступен"));
+            logRepository.flush();
+        }
     }
 }
