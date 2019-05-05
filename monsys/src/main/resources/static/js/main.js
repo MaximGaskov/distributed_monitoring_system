@@ -83,7 +83,7 @@ function updateLogsTable() {
 
             rowData.push("<tr>" +
                 "<td>" + logEntity.date + "</td>" +
-                "<td><i>порт</i> <b>" + logEntity.host + " : " + logEntity.port + "</b></td>" +
+                "<td><b>" + logEntity.host + " : " + logEntity.port + "</b></td>" +
                 "<td><i>" + logEntity.event + "</i></td>"+
                 "</tr>")
         });
@@ -167,7 +167,7 @@ $(document).on("click", "#hTable tbody tr", function () {
 
 var activeMonitoringHost;
 $(document).on("click", "#mTable tbody a", function () {
-    $("#modalLabel").html("Цели хоста мониторинга <i>" + $(this).parent().parent().find("th").text() + "</i>");
+    $("#modalLabel").html("Цели узла кластера<i> " + $(this).parent().parent().find("th").text() + "</i>");
     updateModalContent( $(this).attr('id'));
     activeMonitoringHost = $(this).attr('id');
 });

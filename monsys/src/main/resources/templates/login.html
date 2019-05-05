@@ -42,19 +42,20 @@
 
 <div class="wrapper">
     <div id="formContent">
+
             Войдите в систему
 
         <form th:action="@{/login}" method="post">
-            <input type="text" id="login" name="username" placeholder="login">
-            <input type="text" id="password"  name="password" placeholder="password">
-            <input type="submit"  value="Log In">
+            <input type="text" id="login" name="username" placeholder="Имя пользователя">
+            <input type="text" id="password"  name="password" placeholder="Пароль">
+            <input type="submit"  value="Войти">
         </form>
 
         <div class="error text-danger" th:if="${param.error}">
-            Invalid username and password.
+            Неверные имя пользователя или пароль.
         </div>
         <div class="error text-danger" th:if="${param.logout}">
-            You have been logged out.
+            Вы вышли из системы.
         </div>
 
     </div>

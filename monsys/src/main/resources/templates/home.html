@@ -50,7 +50,7 @@
                 <div class="module top-module">
 
                     <div id="result"></div>
-                    <div class="titl">Хосты</div>
+                    <div class="titl">Целевые узлы</div>
                     <div class="white-plate">
                         <div class="host-table scrollable" id="hTable">
                             <table class="table table-striped">
@@ -98,6 +98,13 @@
                     <div class="white-plate">
                         <div class="log-table scrollable" id="lTable">
                             <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Время</th>
+                                        <th scope="col">Порт</th>
+                                        <th scope="col">Событие</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                 </tbody>
                             </table>
@@ -151,15 +158,15 @@
             <div class="col-md pl-0">
                 <div class="module bot-module">
 
-                    <div class="titl">Хосты мониторинга</div>
+                    <div class="titl">Узлы кластера</div>
                     <div class="white-plate">
                         <div class="monitoring-table  scrollable text-center" id="mTable">
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th scope="col">IP-адрес хоста мониторинга</th>
-                                    <th scope="col">Целевой хост кластера</th>
-                                    <th scope="col">Количество целевых хостов</th>
+                                    <th scope="col">IP-адрес узла кластера</th>
+                                    <th scope="col">Целевой узел кластера</th>
+                                    <th scope="col">Количество целевых узлов</th>
                                     <th></th>
                                 </tr>
                                 </thead>
