@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="utf-8" />
     <title>Monsys</title>
@@ -14,8 +15,16 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-dark navbar-dark py-0 py-md-0">
     <span class="navbar-brand noselect">Monsys</span>
     <span class="nav-item ml-auto"><a class="nav-link disabled" href="#" tabindex="-1"
-                                      aria-disabled="true">User</a></span>
-    <span class="nav-item ml-auto"><a class="nav-link text-white" href="#">Log out</a></span>
+                                      aria-disabled="true" th:inline="text">[[${#httpServletRequest.remoteUser}]]</a></span>
+    <span class="nav-item ml-auto">
+<!--        <a class="nav-link text-white" href="#">-->
+
+            <form th:action="@{/logout}" method="post">
+                <input class="btn btn-secondary" type="submit" value="Log Out"/>
+            </form>
+
+<!--        Log out</a>-->
+    </span>
 
 </nav>
 
