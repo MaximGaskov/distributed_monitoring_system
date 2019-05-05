@@ -83,7 +83,7 @@ function updateLogsTable() {
 
             rowData.push("<tr>" +
                 "<td>" + logEntity.date + "</td>" +
-                "<td><b>" + logEntity.host + " : " + logEntity.port + "</b></td>" +
+                "<td><i>порт</i> <b>" + logEntity.host + " : " + logEntity.port + "</b></td>" +
                 "<td><i>" + logEntity.event + "</i></td>"+
                 "</tr>")
         });

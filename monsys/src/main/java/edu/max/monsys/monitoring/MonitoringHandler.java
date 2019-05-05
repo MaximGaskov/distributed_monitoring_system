@@ -96,7 +96,6 @@ public class MonitoringHandler {
         try {
             host = InetAddress.getByName(hostname);
         } catch (UnknownHostException e) {
-            e.printStackTrace();
             return false;
         }
 
@@ -107,7 +106,6 @@ public class MonitoringHandler {
             int reply = ftp.getReplyCode();
 
             if (!FTPReply.isPositiveCompletion(reply)) {
-                //System.out.println("FTP bad response (" + ftp.getReplyCode() + ") on " + hostname + ":" + port);
                 return false;
             } else {
                 ftp.sendCommand(FTPCmd.USER, "user");
@@ -129,7 +127,6 @@ public class MonitoringHandler {
         HttpURLConnection con = null;
         try {
             URL url = new URL("http://" + hostname + ":" + port);
-            //System.out.println(hostname);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
             con.setConnectTimeout(CONNECTION_TIMEOUT);
@@ -139,7 +136,6 @@ public class MonitoringHandler {
             return status != -1;
 
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         } finally {
             if (con != null)
