@@ -27,6 +27,9 @@ public class MonitoringHost {
     @Column(name = "another_mh_ip_addr")
     private String anotherMHIpAdress;
 
+    @Column(name = "is_up", columnDefinition = "boolean default false")
+    private boolean up;
+
     @OneToMany
     @JoinColumn(name = "observer_id")
     private Set<Host> targets = new HashSet<>();

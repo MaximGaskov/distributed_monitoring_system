@@ -2,9 +2,11 @@ package edu.max.monsys.monitoring;
 
 import edu.max.monsys.entity.Host;
 import edu.max.monsys.entity.Log;
+import edu.max.monsys.entity.MonitoringHost;
 import edu.max.monsys.entity.Port;
 import edu.max.monsys.repository.HostRepository;
 import edu.max.monsys.repository.LogRepository;
+import edu.max.monsys.repository.MonitoringHostRepository;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPCmd;
 import org.apache.commons.net.ftp.FTPReply;
@@ -12,6 +14,8 @@ import org.apache.commons.net.pop3.POP3Client;
 import org.apache.commons.net.smtp.SMTPClient;
 import org.apache.commons.net.smtp.SMTPReply;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.transaction.Transactional;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +25,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 import java.util.TimeZone;
 
 
@@ -32,18 +37,36 @@ public class MonitoringHandler {
     private HostRepository hostRepository;
 
     @Autowired
+    private MonitoringHostRepository monitoringHostRepository;
+
+    @Autowired
     private LogRepository logRepository;
 
-//    @Value("${server.address}")
-//    private String myIP;
 
-//    @Value("${fixedDelay.in.milliseconds}")
-//    private int delay;
+    @Value("${server.address}")
+    private String myIP;
+
 
     @Transactional
     public void check() {
-//        ftpPortCheck("185.54.136.70", 21); //ftp.mccme.ru
-//        //System.out.println(myIP);
+
+        if (monitoringHostRepository.findMonitoringHostByIpAddress(myIP).isPresent()) {
+            monitoringHostRepository.findMonitoringHostByIpAddress(myIP).get().setUp(true);
+            String targetIP = monitoringHostRepository.findMonitoringHostByIpAddress(myIP).get().getAnotherMHIpAdress();
+            Optional<MonitoringHost> targetMH = monitoringHostRepository.findMonitoringHostByIpAddress(targetIP);
+
+            if (targetIP != null && sshCheck(targetIP, 22) && targetMH.isPresent()) {
+
+                targetMH.get().setUp(true);
+            }
+            else if (targetIP != null && targetMH.isPresent()) {
+                targetMH.get().setUp(false);
+            }
+
+        } else {
+            System.out.println("add host to cluster");
+            return;
+        }
 
         for (Host host : hostRepository.findAll()) {
             for (Port port : host.getPorts()) {

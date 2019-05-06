@@ -3,7 +3,7 @@ package edu.max.monsys.controller;
 import edu.max.monsys.entity.ConfigMonitoringRate;
 import edu.max.monsys.entity.Log;
 import edu.max.monsys.entity.MonitoringHost;
-import edu.max.monsys.monitoring.ClusterSelfMonitoringHandler;
+import edu.max.monsys.monitoring.MonitoringHandler;
 import edu.max.monsys.repository.ConfigRepository;
 import edu.max.monsys.repository.LogRepository;
 import edu.max.monsys.repository.MonitoringHostRepository;
@@ -26,10 +26,10 @@ public class MonitoringHostsController {
     private MonitoringHostRepository monitoringHostRepository;
 
     @Autowired
-    ClusterSelfMonitoringHandler clusterSelfMonitoringHandler;
+    private LogRepository logRepository;
 
     @Autowired
-    private LogRepository logRepository;
+    MonitoringHandler monitoringHandler;
 
     @GetMapping
     public Iterable<MonitoringHost> findAll() {
@@ -57,10 +57,9 @@ public class MonitoringHostsController {
 
         monitoringHostRepository.save(addedMHost);
 
-        if (monitoringHostRepository.count() > 1) {
-            clusterSelfMonitoringHandler.reassignClusterSelfMonitoringOnMHostAdding(addedMHost.getId());
-        }
+        monitoringHandler.check();
 
+        monitoringHostRepository.flush();
 
         return ResponseEntity.ok("");
     }
@@ -70,7 +69,6 @@ public class MonitoringHostsController {
         if (monitoringHostRepository.count() == 1)
             return new ResponseEntity<>("Сперва добавьте другой хост мониторинга", HttpStatus.BAD_REQUEST);
         else {
-            clusterSelfMonitoringHandler.reassignClusterSelfMonitoringOnMHostDeletion(id);
             monitoringHostRepository.deleteById(id);
         }
         return ResponseEntity.ok("");

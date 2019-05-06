@@ -58,9 +58,18 @@ function updateMonitoringHostTable() {
         var rowData = [];
 
         jQuery(data).each(function(i, mHostEntity){
+            if (mHostEntity.up === true) {
+                console.log("yes");
+                rowData.push("<tr>" +
+                    "<td><div class='up'>" + mHostEntity.ipAddress + "</div></td>");
+            } else {
+                console.log("no");
+                rowData.push("<tr>" +
+                    "<td><div class='down'>" + mHostEntity.ipAddress + "</div></td>");
+            }
 
-            rowData.push("<tr>" +
-                "<th scope='row'>" + mHostEntity.ipAddress + "</th>" +
+
+            rowData.push(
                 "<td>" + mHostEntity.anotherMHIpAdress + "</td>" +
                 "<td>" + mHostEntity.targets.length + "</td>" +
                 "<td><a id='" + mHostEntity.id + "' data-toggle=\"modal\" " +
@@ -204,6 +213,7 @@ $('#portForm').submit(function(e){
                 $("#hostIpValidationMsg").text('');
             },
             error: function (data) {
+                console.log(data);
                 $("#portValidationMsg").text(data.responseText);
             }
         });
@@ -221,6 +231,7 @@ $('#monitoringForm').submit(function(e){
             $("#monitoringValidationMsg").text('');
         },
         error: function (data) {
+            console.log(data);
             $("#monitoringValidationMsg").text(data.responseText);
         }
     });
@@ -297,6 +308,9 @@ $("#rateButton").on("click", function () {
     $(this).prop("disabled", true);
 });
 
+function checkCluster() {
+
+}
 
 intervalId = setInterval(updateHostTable, 3000);
 intervalId = setInterval(updateMonitoringHostTable, 3000);

@@ -59,6 +59,15 @@
     padding-bottom: 4px;
 }
 
+.module .table .down {
+    color: red !important;
+}
+
+
+.module .table .up {
+    color: green !important;
+}
+
 .module .port-table {
     min-height: 0;
     max-height: 80%;
