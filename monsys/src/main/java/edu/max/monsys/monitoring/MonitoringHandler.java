@@ -55,7 +55,7 @@ public class MonitoringHandler {
             String targetIP = monitoringHostRepository.findMonitoringHostByIpAddress(myIP).get().getAnotherMHIpAdress();
             Optional<MonitoringHost> targetMH = monitoringHostRepository.findMonitoringHostByIpAddress(targetIP);
 
-            if (targetIP != null && sshCheck(targetIP, 22) && targetMH.isPresent()) {
+            if (targetIP != null && httpPortCheck(targetIP, 8089) && targetMH.isPresent()) {
 
                 targetMH.get().setUp(true);
             }
