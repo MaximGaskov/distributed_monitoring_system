@@ -64,7 +64,6 @@ public class MonitoringHandler {
             }
 
         } else {
-            System.out.println("add host to cluster");
             return;
         }
 
