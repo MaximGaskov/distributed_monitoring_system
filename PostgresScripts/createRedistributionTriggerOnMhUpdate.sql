@@ -17,19 +17,25 @@ IF (OLD.is_up = TRUE) AND (NEW.is_up = FALSE)
     THEN
 
 --Redistributr targets
-        UPDATE monitoring_schema.hosts SET observer_id = NULL WHERE observer_id = OLD.id;
+	UPDATE monitoring_schema.hosts SET observer_id = NULL WHERE observer_id = OLD.id;
 
         numberOfTargets := COUNT(*) FROM monitoring_schema.hosts WHERE observer_id IS NULL;
         numberOfMHostsLeft := COUNT(*) FROM monitoring_schema.monitoring_hosts WHERE id <> OLD.id AND is_up = TRUE;
 
-        -- Reassign self monitoring
+	-- Reassign self monitoring
         IF numberOfMHostsLeft = 1 THEN
                 NEW.another_mh_ip_addr = NULL;
-        ELSE
-                UPDATE monitoring_schema.monitoring_hosts SET another_mh_ip_addr = OLD.another_mh_ip_addr
+		UPDATE monitoring_schema.monitoring_hosts SET another_mh_ip_addr = NULL
                         WHERE another_mh_ip_addr = OLD.ip_addr;
+        ELSE
+		NEW.another_mh_ip_addr = NULL;
+        	UPDATE monitoring_schema.monitoring_hosts SET another_mh_ip_addr = OLD.another_mh_ip_addr
+                	WHERE another_mh_ip_addr = OLD.ip_addr;
         END IF;
         ------------
+
+
+
 
         IF numberOfMHostsLeft = 0 THEN 
         RETURN NEW;
@@ -57,21 +63,21 @@ ELSE IF (OLD.is_up = FALSE) AND (NEW.is_up = TRUE)
 
 --Reassign self monitoring
 
-        workingMHostsNumber := COUNT(*) FROM monitoring_schema.monitoring_hosts WHERE is_up = TRUE AND id <> NEW.id;
-        randomHostId := (SELECT id FROM monitoring_schema.monitoring_hosts WHERE is_up = TRUE AND id <> NEW.id LIMIT 1);
+	workingMHostsNumber := COUNT(*) FROM monitoring_schema.monitoring_hosts WHERE is_up = TRUE AND id <> NEW.id;
+	randomHostId := (SELECT id FROM monitoring_schema.monitoring_hosts WHERE is_up = TRUE AND id <> NEW.id LIMIT 1);
 
-        IF workingMHostsNumber > 1 THEN
-                NEW.another_mh_ip_addr = (SELECT another_mh_ip_addr FROM monitoring_schema.monitoring_hosts
-                        WHERE id = randomHostId);
+	IF workingMHostsNumber > 1 THEN
+		NEW.another_mh_ip_addr = (SELECT another_mh_ip_addr FROM monitoring_schema.monitoring_hosts
+			WHERE id = randomHostId);
 
-                UPDATE monitoring_schema.monitoring_hosts SET another_mh_ip_addr = NEW.ip_addr
+		UPDATE monitoring_schema.monitoring_hosts SET another_mh_ip_addr = NEW.ip_addr
+			WHERE id = randomHostId;
+	ELSE
+		NEW.another_mh_ip_addr = (SELECT ip_addr FROM monitoring_schema.monitoring_hosts
+			WHERE id = randomHostId);
+		UPDATE monitoring_schema.monitoring_hosts SET another_mh_ip_addr = NEW.ip_addr
                         WHERE id = randomHostId;
-        ELSE
-                NEW.another_mh_ip_addr = (SELECT ip_addr FROM monitoring_schema.monitoring_hosts
-                        WHERE id = randomHostId);
-                UPDATE monitoring_schema.monitoring_hosts SET another_mh_ip_addr = NEW.ip_addr
-                        WHERE id = randomHostId;
-        END IF;
+	END IF;
 
 --Redistribute targets
 
@@ -100,5 +106,3 @@ CREATE TRIGGER redistribute_targets_on_MH_update_trigger
    ON monitoring_schema.monitoring_hosts 
    FOR EACH ROW
    EXECUTE PROCEDURE monitoring_schema.redistribute_target_host_on_mHost_update();
-
-
