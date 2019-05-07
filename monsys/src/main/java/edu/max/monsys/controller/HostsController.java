@@ -1,8 +1,10 @@
 package edu.max.monsys.controller;
 
 import edu.max.monsys.entity.Host;
+import edu.max.monsys.entity.Port;
 import edu.max.monsys.repository.HostRepository;
 import edu.max.monsys.repository.MonitoringHostRepository;
+import edu.max.monsys.repository.PortRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,9 @@ class HostsController {
 
     @Autowired
     private HostRepository hostRepository;
+
+    @Autowired
+    private PortRepository portRepository;
 
     @Autowired
     private MonitoringHostRepository monitoringHostRepository;
@@ -47,6 +52,8 @@ class HostsController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+        for (Port p : hostRepository.findById(id).get().getPorts())
+            portRepository.deleteById(p.getId());
         hostRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }

@@ -42,7 +42,7 @@ public class SchedulingConfig implements SchedulingConfigurer {
                     Date lastActualExecutionTime = triggerContext.lastActualExecutionTime();
                     nextExecutionTime.setTime(lastActualExecutionTime != null ? lastActualExecutionTime : new Date());
                     if (configRepository.count() == 0)
-                        nextExecutionTime.add(Calendar.MILLISECOND, 6000);
+                        nextExecutionTime.add(Calendar.MILLISECOND, 15000);
                     else
                         nextExecutionTime.add(Calendar.MILLISECOND,
                                 configRepository.findById(0).get().getRateSeconds() * 1000);
