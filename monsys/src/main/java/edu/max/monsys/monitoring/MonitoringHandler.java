@@ -46,16 +46,19 @@ public class MonitoringHandler {
     @Value("${server.address}")
     private String myIP;
 
+    @Value("${server.port}")
+    private Integer sysPort;
 
     @Transactional
     public void check() {
+
 
         if (monitoringHostRepository.findMonitoringHostByIpAddress(myIP).isPresent()) {
             monitoringHostRepository.findMonitoringHostByIpAddress(myIP).get().setUp(true);
             String targetIP = monitoringHostRepository.findMonitoringHostByIpAddress(myIP).get().getAnotherMHIpAdress();
             Optional<MonitoringHost> targetMH = monitoringHostRepository.findMonitoringHostByIpAddress(targetIP);
 
-            if (targetIP != null && httpPortCheck(targetIP, 8089) && targetMH.isPresent()) {
+            if (targetIP != null && httpPortCheck(targetIP, sysPort) && targetMH.isPresent()) {
 
                 targetMH.get().setUp(true);
             }
