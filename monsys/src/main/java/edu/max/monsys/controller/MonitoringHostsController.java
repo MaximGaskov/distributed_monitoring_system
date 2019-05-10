@@ -84,10 +84,4 @@ public class MonitoringHostsController {
         configRepository.flush();
         }
     }
-
-    @GetMapping("/log")
-    public Iterable<Log> getLogs() {
-        return logRepository.findAll();
-    }
-
 }

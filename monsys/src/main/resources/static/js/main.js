@@ -84,7 +84,7 @@ function updateMonitoringHostTable() {
 }
 
 function updateLogsTable() {
-    $.getJSON('/hosts/monitoring/log', function (data) {
+    $.getJSON('/logs', function (data) {
 
         var rowData = [];
 
@@ -233,6 +233,17 @@ $('#monitoringForm').submit(function(e){
         error: function (data) {
             console.log(data);
             $("#monitoringValidationMsg").text(data.responseText);
+        }
+    });
+});
+
+$('#logForm').submit(function(e){
+    e.preventDefault();
+    $.ajax({
+        url:'/logs',
+        type:'delete',
+        success:function() {
+            updateLogsTable()
         }
     });
 });
