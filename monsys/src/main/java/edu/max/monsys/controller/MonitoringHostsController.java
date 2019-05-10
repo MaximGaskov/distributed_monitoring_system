@@ -26,9 +26,6 @@ public class MonitoringHostsController {
     private MonitoringHostRepository monitoringHostRepository;
 
     @Autowired
-    private LogRepository logRepository;
-
-    @Autowired
     MonitoringHandler monitoringHandler;
 
     @GetMapping

@@ -59,11 +59,9 @@ function updateMonitoringHostTable() {
 
         jQuery(data).each(function(i, mHostEntity){
             if (mHostEntity.up === true) {
-                console.log("yes");
                 rowData.push("<tr>" +
                     "<td><div class='up'>" + mHostEntity.ipAddress + "</div></td>");
             } else {
-                console.log("no");
                 rowData.push("<tr>" +
                     "<td><div class='down'>" + mHostEntity.ipAddress + "</div></td>");
             }
@@ -136,11 +134,10 @@ function showPortsForHost(id) {
 }
 
 function updateModalContent(monitoringHostId) {
-    console.log(monitoringHostId);
+
     $.getJSON('/hosts/monitoring/' + monitoringHostId, function (data) {
 
         var hostRow = [];
-        console.log(data);
 
         jQuery(data.targets).each(function (i, hostEntity) {
 
@@ -213,7 +210,6 @@ $('#portForm').submit(function(e){
                 $("#hostIpValidationMsg").text('');
             },
             error: function (data) {
-                console.log(data);
                 $("#portValidationMsg").text(data.responseText);
             }
         });
@@ -231,7 +227,6 @@ $('#monitoringForm').submit(function(e){
             $("#monitoringValidationMsg").text('');
         },
         error: function (data) {
-            console.log(data);
             $("#monitoringValidationMsg").text(data.responseText);
         }
     });
@@ -304,7 +299,6 @@ $("#idRangeSlider").on("input", function() {
 
 $("#rateForm").submit(function(e) {
    e.preventDefault();
-   console.log($(this).serialize());
     $.ajax({
         url:'/hosts/monitoring/rate/',
         type:'post',
@@ -319,9 +313,6 @@ $("#rateButton").on("click", function () {
     $(this).prop("disabled", true);
 });
 
-function checkCluster() {
-
-}
 
 intervalId = setInterval(updateHostTable, 3000);
 intervalId = setInterval(updateMonitoringHostTable, 3000);

@@ -23,7 +23,6 @@ import java.io.InputStreamReader;
 import java.net.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 import java.util.TimeZone;
@@ -59,10 +58,25 @@ public class MonitoringHandler {
             Optional<MonitoringHost> targetMH = monitoringHostRepository.findMonitoringHostByIpAddress(targetIP);
 
             if (targetIP != null && httpPortCheck(targetIP, sysPort) && targetMH.isPresent()) {
-
+                if (!targetMH.get().isUp()) {
+                    Date date = new Date();
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    df.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+                    logRepository.save(
+                            new Log(df.format(date), targetMH.get().getIpAddress(), sysPort, "доступен"));
+                    logRepository.flush();
+                }
                 targetMH.get().setUp(true);
             }
             else if (targetIP != null && targetMH.isPresent()) {
+                if (targetMH.get().isUp()) {
+                    Date date = new Date();
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    df.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+                    logRepository.save(
+                            new Log(df.format(date), targetMH.get().getIpAddress(), sysPort, "недоступен"));
+                    logRepository.flush();
+                }
                 targetMH.get().setUp(false);
             }
 
@@ -70,28 +84,26 @@ public class MonitoringHandler {
             return;
         }
 
-        for (Host host : hostRepository.findAll()) {
+        for (Host host : monitoringHostRepository.findMonitoringHostByIpAddress(myIP).get().getTargets()) {
+
+
+
             for (Port port : host.getPorts()) {
 
                 if (ftpPortCheck(host.getIpAddress(), port.getNumber())) {
                     logPortIsUp(host, port);
-                    port.setUp(true);
                     port.setService("FTP");
                 } else if (httpPortCheck(host.getIpAddress(), port.getNumber())) {
                     logPortIsUp(host, port);
-                    port.setUp(true);
                     port.setService("HTTP");
                 } else if (smtpPortCheck(host.getIpAddress(), port.getNumber())) {
                     logPortIsUp(host, port);
-                    port.setUp(true);
                     port.setService("SMTP");
                 } else if (pop3PortCheck(host.getIpAddress(), port.getNumber())) {
                     logPortIsUp(host, port);
-                    port.setUp(true);
                     port.setService("POP3");
                 } else if (sshCheck(host.getIpAddress(), port.getNumber())) {
                     logPortIsUp(host, port);
-                    port.setUp(true);
                     port.setService("SSH");
                 } else {
                     if (port.isUp()) {
@@ -270,5 +282,7 @@ public class MonitoringHandler {
                     new Log(df.format(date), host.getIpAddress(), port.getNumber(), "доступен"));
             logRepository.flush();
         }
+        port.setUp(true);
     }
+
 }
