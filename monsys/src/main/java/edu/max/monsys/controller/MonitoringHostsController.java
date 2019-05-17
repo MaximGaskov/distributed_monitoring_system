@@ -48,7 +48,7 @@ public class MonitoringHostsController {
                         "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$"))
             return new ResponseEntity<>("Неверный формат IP-адреса", HttpStatus.BAD_REQUEST);
         else if (monitoringHostRepository.findMonitoringHostByIpAddress(ip).isPresent())
-            return new ResponseEntity<>("Хост уже есть в списке", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Узел уже есть в списке", HttpStatus.BAD_REQUEST);
 
         MonitoringHost addedMHost = new MonitoringHost(ip);
 

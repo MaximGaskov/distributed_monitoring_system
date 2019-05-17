@@ -34,7 +34,7 @@ class PortsController {
         if (!portNumber.matches("\\d+"))
             return new ResponseEntity<>("Недопустимый формат порта", HttpStatus.BAD_REQUEST);
         if (!hostId.matches("\\d+"))
-            return new ResponseEntity<>("Хост не выбран", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Узел не выбран", HttpStatus.BAD_REQUEST);
 
         long port = Long.valueOf(portNumber);
         int hId = Integer.valueOf(hostId);
@@ -53,7 +53,7 @@ class PortsController {
         if (hostRepository.findById(hId).isPresent())
             portRepository.save(p);
         else
-            return new ResponseEntity<>("Хост отсутствует", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Узел отсутствует", HttpStatus.BAD_REQUEST);
 
 
         return ResponseEntity.ok("");

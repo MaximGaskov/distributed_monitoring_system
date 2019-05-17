@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 @RestController
 @RequestMapping("/hosts")
 class HostsController {
@@ -39,13 +42,28 @@ class HostsController {
                     "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$"))
                 return new ResponseEntity<>("Неверный формат IP-адреса", HttpStatus.BAD_REQUEST);
         else if (hostRepository.findHostByIpAddress(ip).isPresent())
-            return new ResponseEntity<>("Хост уже есть в списке", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Узел уже есть в списке", HttpStatus.BAD_REQUEST);
 
 
         if (monitoringHostRepository.count() == 0)
-            return new ResponseEntity<>("Сперва добавьте хост мониторинга", HttpStatus.BAD_REQUEST);
-        else
-            hostRepository.save(new Host(ip));
+            return new ResponseEntity<>("Сперва добавьте узел мониторинга", HttpStatus.BAD_REQUEST);
+        else {
+
+            Host h = new Host(ip);
+
+            InetAddress addr = null;
+            try {
+                addr = InetAddress.getByName(ip);
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+            if (addr != null) {
+                String hostname = addr.getCanonicalHostName();
+                h.setDomainName(hostname);
+            }
+
+            hostRepository.save(h);
+        }
 
         return ResponseEntity.ok("");
     }
