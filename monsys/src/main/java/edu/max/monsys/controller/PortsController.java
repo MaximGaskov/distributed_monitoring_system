@@ -4,7 +4,6 @@ import edu.max.monsys.entity.Host;
 import edu.max.monsys.entity.Port;
 import edu.max.monsys.repository.HostRepository;
 import edu.max.monsys.repository.PortRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,10 +14,13 @@ import java.util.Optional;
 @RequestMapping("/ports")
 class PortsController {
 
-    @Autowired
-    private PortRepository portRepository;
-    @Autowired
-    private HostRepository hostRepository;
+    private final PortRepository portRepository;
+    private final HostRepository hostRepository;
+
+    public PortsController(PortRepository portRepository, HostRepository hostRepository) {
+        this.portRepository = portRepository;
+        this.hostRepository = hostRepository;
+    }
 
     @GetMapping(value = "/{host_id}")
     public Iterable<Port> findByHostId(@PathVariable("host_id") Integer id) {

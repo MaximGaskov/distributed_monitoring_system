@@ -2,7 +2,6 @@ package edu.max.monsys.controller;
 
 import edu.max.monsys.entity.Log;
 import edu.max.monsys.repository.LogRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,8 +9,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/logs")
 public class LogController {
 
-    @Autowired
-    private LogRepository logRepository;
+    private final LogRepository logRepository;
+
+    public LogController(LogRepository logRepository) {
+        this.logRepository = logRepository;
+    }
 
     @GetMapping
     public Iterable<Log> getLogs() {

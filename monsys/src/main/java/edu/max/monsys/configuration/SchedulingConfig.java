@@ -2,7 +2,6 @@ package edu.max.monsys.configuration;
 
 import edu.max.monsys.monitoring.MonitoringHandler;
 import edu.max.monsys.repository.ConfigRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -19,8 +18,11 @@ import java.util.concurrent.Executors;
 @EnableScheduling
 public class SchedulingConfig implements SchedulingConfigurer {
 
-    @Autowired
-    private ConfigRepository configRepository;
+    private final ConfigRepository configRepository;
+
+    public SchedulingConfig(ConfigRepository configRepository) {
+        this.configRepository = configRepository;
+    }
 
     @Bean
     public MonitoringHandler monitoringHandler() {

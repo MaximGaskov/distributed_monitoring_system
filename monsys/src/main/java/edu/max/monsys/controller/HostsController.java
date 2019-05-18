@@ -5,7 +5,6 @@ import edu.max.monsys.entity.Port;
 import edu.max.monsys.repository.HostRepository;
 import edu.max.monsys.repository.MonitoringHostRepository;
 import edu.max.monsys.repository.PortRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +16,17 @@ import java.net.UnknownHostException;
 @RequestMapping("/hosts")
 class HostsController {
 
-    @Autowired
-    private HostRepository hostRepository;
+    private final HostRepository hostRepository;
 
-    @Autowired
-    private PortRepository portRepository;
+    private final PortRepository portRepository;
 
-    @Autowired
-    private MonitoringHostRepository monitoringHostRepository;
+    private final MonitoringHostRepository monitoringHostRepository;
+
+    public HostsController(HostRepository hostRepository, PortRepository portRepository, MonitoringHostRepository monitoringHostRepository) {
+        this.hostRepository = hostRepository;
+        this.portRepository = portRepository;
+        this.monitoringHostRepository = monitoringHostRepository;
+    }
 
     @GetMapping
     public Iterable<Host> findAll() {

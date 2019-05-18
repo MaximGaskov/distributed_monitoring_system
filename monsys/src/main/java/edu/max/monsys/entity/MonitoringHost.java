@@ -38,8 +38,5 @@ public class MonitoringHost {
         this.ipAddress = ipAddress;
     }
 
-    public void addTarget(Host target) {
-        this.targets.add(target);
-    }
 
 }

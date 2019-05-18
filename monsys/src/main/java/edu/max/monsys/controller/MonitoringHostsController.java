@@ -1,13 +1,9 @@
 package edu.max.monsys.controller;
 
 import edu.max.monsys.entity.ConfigMonitoringRate;
-import edu.max.monsys.entity.Log;
 import edu.max.monsys.entity.MonitoringHost;
-import edu.max.monsys.monitoring.MonitoringHandler;
 import edu.max.monsys.repository.ConfigRepository;
-import edu.max.monsys.repository.LogRepository;
 import edu.max.monsys.repository.MonitoringHostRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,14 +15,15 @@ import java.util.Optional;
 public class MonitoringHostsController {
 
 
-    @Autowired
-    private ConfigRepository configRepository;
+    private final ConfigRepository configRepository;
 
-    @Autowired
-    private MonitoringHostRepository monitoringHostRepository;
+    private final MonitoringHostRepository monitoringHostRepository;
 
-    @Autowired
-    MonitoringHandler monitoringHandler;
+    public MonitoringHostsController(ConfigRepository configRepository, MonitoringHostRepository monitoringHostRepository) {
+        this.configRepository = configRepository;
+        this.monitoringHostRepository = monitoringHostRepository;
+    }
+
 
     @GetMapping
     public Iterable<MonitoringHost> findAll() {
@@ -54,7 +51,6 @@ public class MonitoringHostsController {
 
         monitoringHostRepository.save(addedMHost);
 
-        monitoringHandler.check();
 
         monitoringHostRepository.flush();
 
@@ -77,8 +73,11 @@ public class MonitoringHostsController {
         if (configRepository.count() == 0)
             configRepository.save(new ConfigMonitoringRate());
         else  {
-        configRepository.findById(0).get().setRateSeconds(rateVal * 60);
-        configRepository.flush();
+            Optional<ConfigMonitoringRate> cfmr = configRepository.findById(0);
+            if (cfmr.isPresent()) {
+                cfmr.get().setRateSeconds(rateVal * 60);
+                configRepository.flush();
+            }
         }
     }
 }
