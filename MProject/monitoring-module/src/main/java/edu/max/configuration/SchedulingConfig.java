@@ -51,6 +51,7 @@ public class SchedulingConfig implements SchedulingConfigurer {
                     return nextExecutionTime.getTime();
                 }
         );
+        System.out.println("good");
     }
 }
 

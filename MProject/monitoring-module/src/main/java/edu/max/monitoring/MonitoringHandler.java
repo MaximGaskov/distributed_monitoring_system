@@ -42,6 +42,9 @@ public class MonitoringHandler {
     @Autowired
     private LogRepository logRepository;
 
+    @Autowired
+    private NotificationClient notificationClient;
+
 
     @Value("${server.address}")
     private String myIP;
@@ -53,6 +56,7 @@ public class MonitoringHandler {
     public void check() {
 
         if (monitoringHostRepository.findMonitoringHostByIpAddress(myIP).isPresent()) {
+            System.out.println("check");
             monitoringHostRepository.findMonitoringHostByIpAddress(myIP).get().setUp(true);
             String targetIP = monitoringHostRepository.findMonitoringHostByIpAddress(myIP).get().getAnotherMHIpAdress();
             Optional<MonitoringHost> targetMH = monitoringHostRepository.findMonitoringHostByIpAddress(targetIP);
@@ -76,11 +80,16 @@ public class MonitoringHandler {
                     logRepository.save(
                             new Log(df.format(date), targetMH.get().getIpAddress(), sysPort, "недоступен"));
                     logRepository.flush();
+                    notificationClient.sendMessage("Внимание, на время " + df.format(date)
+                            + " узел кластреа мониторинга  "
+                            + targetMH.get().getIpAddress()
+                            + "перестал быть доступным.");
                 }
                 targetMH.get().setUp(false);
             }
 
         } else {
+            System.out.println("no");
             return;
         }
 
@@ -96,6 +105,7 @@ public class MonitoringHandler {
                 } else if (httpPortCheck(host.getIpAddress(), port.getNumber())) {
                     logPortIsUp(host, port);
                     port.setService("HTTP");
+                    System.out.println("http check");
                 } else if (smtpPortCheck(host.getIpAddress(), port.getNumber())) {
                     logPortIsUp(host, port);
                     port.setService("SMTP");
@@ -106,6 +116,7 @@ public class MonitoringHandler {
                     logPortIsUp(host, port);
                     port.setService("SSH");
                 } else {
+                    System.out.println("port doesnt work");
                     if (port.isUp()) {
                         Date date = new Date();
                         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -114,6 +125,14 @@ public class MonitoringHandler {
                         logRepository.save(
                                 new Log(df.format(date), host.getIpAddress(), port.getNumber(), "недоступен"));
                         logRepository.flush();
+
+                        notificationClient.sendMessage("Внимание, на время " + df.format(date)
+                                + " Сервис, работающий по протоколу "
+                                + port.getService()
+                                + " на порту "
+                                + host.getIpAddress() + ":"
+                                + port.getNumber()
+                                + " перестал быть доступным.");
                     }
                     port.setUp(false);
                 }
