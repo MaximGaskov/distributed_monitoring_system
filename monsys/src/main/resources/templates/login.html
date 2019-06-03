@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="utf-8" />
+    <title>Monsys Login</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login-style.css}">
+    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+
+
+<div class="wrapper">
+    <div id="formContent">
+
+            Войдите в систему
+
+        <form th:action="@{/login}" method="post">
+            <input type="text" id="login" name="username" placeholder="Имя пользователя">
+            <input type="password" id="password"  name="password" placeholder="Пароль">
+            <input type="submit"  value="Войти">
+        </form>
+
+        <div class="error text-danger" th:if="${param.error}">
+            Неверные имя пользователя или пароль.
+        </div>
+        <div class="error text-danger" th:if="${param.logout}">
+            Вы вышли из системы.
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

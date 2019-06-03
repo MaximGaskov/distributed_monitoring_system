@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="utf-8" />
+    <title>Monsys</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home-style.css}">
+    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-dark navbar-dark py-0 py-md-0">
+    <span class="navbar-brand noselect">Monsys</span>
+    <span class="nav-item ml-auto"><a class="nav-link disabled" href="#" tabindex="-1"
+                                      aria-disabled="true" th:inline="text">[[${#httpServletRequest.remoteUser}]]</a></span>
+    <span class="nav-item ml-auto">
+<!--        <a class="nav-link text-white" href="#">-->
+
+            <form th:action="@{/logout}" method="post">
+                <input class="btn btn-secondary" type="submit" value="Log Out"/>
+            </form>
+
+<!--        Log out</a>-->
+    </span>
+
+</nav>
+
+
+
+<div class="bg">
+    <div class="container pt-2 mt-2 pb-2">
+        <form id="rateForm" class="row">
+            <div class="col-3 text-center">
+                <b>Частота мониторинга (мин.):</b>
+            </div>
+            <div class="col-md-1 text-center" id="rangeVal" type="text">1</div>
+            <div class="slidecontainer col-md-6">
+                <input name="rateVal" defaultValue="1" type="range" min="1" max="60" value="1" class="slider" id="idRangeSlider">
+            </div>
+            <div class="col-1 ml-auto mr-auto">
+                <button type="submit" class="btn btn-secondary float-right" id="rateButton">Установить</button>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-md-7 pr-1">
+                <div class="module top-module">
+
+                    <div id="result"></div>
+                    <div class="titl">Целевые узлы</div>
+                    <div class="white-plate">
+                        <div class="host-table scrollable" id="hTable">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">IP-адрес</th>
+                                    <th scope="col">Доменное имя</th>
+                                    <th scope="col">Статус портов</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <form class="add-host add-form" method="post" action="/hosts" id = "hostIpForm">
+                        <div class="form-row p-2">
+                            <div class="col-3">
+                                <input type="text" class="form-control" name="ip" placeholder="IP-адрес">
+                            </div>
+                            <div class="col text-center text-secondary pr-2 pt-2" id="hostIpValidationMsg"></div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary float-right">
+                                    Добавить
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md pl-0">
+                <div class="module top-module">
+                    <div class="titl">Лог событий</div>
+
+                    <div class="white-plate">
+                        <div class="log-table scrollable" id="lTable">
+                            <table class="table table-borderless">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Время</th>
+                                        <th scope="col">Порт</th>
+                                        <th scope="col">Событие</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <td></td>
+                                <td></td>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <form class="add-host add-form" id="logForm">
+                        <div class="form-row p-2">
+                            <div class="col text-center">
+                                <button type="submit" class="btn btn-primary">
+                                    Очистить
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md pr-1">
+                <div class="module bot-module">
+                    <div class="titl" id="portsTableLabel">Список портов</div>
+
+                    <div class="white-plate">
+                        <div class="port-table scrollable" id="pTable">
+                            <table class="table table-borderless">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Порт</th>
+                                    <th scope="col">Сервис</th>
+                                    <th scope="col">Статус</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+
+                                <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <form class="add-port add-form" id="portForm">
+                        <div class="form-row p-2">
+                            <div class="col-2">
+                                <input type="text" class="form-control" name="port" placeholder="Порт">
+                            </div>
+                            <div class="col-6 text-center text-secondary pr-2 pt-2" id="portValidationMsg"></div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary float-right">Добавить</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md pl-0">
+                <div class="module bot-module">
+
+                    <div class="titl">Узлы кластера</div>
+                    <div class="white-plate">
+                        <div class="monitoring-table  scrollable text-center" id="mTable">
+                            <table class="table table-borderless">
+                                <thead>
+                                <tr>
+                                    <th scope="col">IP-адрес узла кластера</th>
+                                    <th scope="col">Целевой узел кластера</th>
+                                    <th scope="col">Количество целевых узлов</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                </tr>
+                                </tbody>
+
+                                <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <form class="add-port add-form" id="monitoringForm">
+                        <div class="form-row p-2">
+                            <div class="col-3">
+                                <input type="text" class="form-control" name="ip" placeholder="IP-адрес">
+                            </div>
+                            <div class="col-6 text-center text-secondary pr-2 pt-2" id="monitoringValidationMsg"></div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary float-right">Добавить</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade " id="monitoringSettings" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mhost-table scrollable" id="modalTable">
+                    <table class="table table-striped text-center">
+                        <tbody>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger ml-auto mr-auto" data-dismiss="modal" id='mhostDelete'>Удалить
+                    хост</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
